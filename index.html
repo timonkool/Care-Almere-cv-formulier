@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Care Almere — Testformulier CV &amp; motivatiebrief</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+:root{
+  --teal-800:#016160; --teal-700:#017371; --teal-600:#018a89; --teal-100:#d6efee; --teal-50:#ecf7f6;
+  --red-700:#b02525; --red-600:#cf2e2e; --red-50:#fdeeee;
+  --coral-500:#e59078; --coral-100:#fbe6df;
+  --slate-900:#1e293b; --slate-700:#334155; --slate-600:#475569; --slate-500:#64748b;
+  --slate-300:#cbd5e1; --slate-200:#e2e8f0; --slate-100:#eef2f6; --slate-50:#f6f8fb; --white:#fff;
+  --surface-brand:var(--teal-600); --text-strong:var(--slate-900); --text-body:var(--slate-700); --text-muted:var(--slate-500);
+  --color-brand:var(--teal-600); --color-action:var(--red-600); --color-accent:var(--coral-500);
+  --font-sans:"Open Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-pill:999px;
+  --shadow-sm:0 2px 6px rgba(15,23,42,.07); --shadow-md:0 6px 18px rgba(15,23,42,.09);
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-sans);color:var(--text-body);background:var(--slate-50);line-height:1.6;}
+.app{max-width:680px;margin:0 auto;min-height:100vh;background:var(--white);box-shadow:var(--shadow-sm);}
+
+/* progress */
+.progress{position:sticky;top:0;z-index:10;background:var(--white);padding:14px 20px 12px;border-bottom:1px solid var(--slate-200);}
+.progress .bar{height:8px;background:var(--slate-200);border-radius:var(--radius-pill);overflow:hidden;}
+.progress .fill{height:100%;width:0;background:var(--color-brand);border-radius:var(--radius-pill);transition:width .3s ease;}
+.progress .label{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:.8rem;color:var(--text-muted);}
+
+/* header */
+.hd{background:var(--surface-brand);color:#fff;padding:28px 24px;position:relative;overflow:hidden;}
+.hd::after{content:"";position:absolute;right:-50px;top:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);}
+.hd img{height:34px;filter:brightness(0) invert(1);margin-bottom:14px;}
+.hd .eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);margin:0 0 6px;}
+.hd h1{font-size:1.5rem;font-weight:700;margin:0 0 6px;line-height:1.2;}
+.hd p{margin:0;color:rgba(255,255,255,.9);font-size:.95rem;}
+
+.body{padding:8px 24px 32px;}
+
+/* steps */
+.step{display:none;animation:fade .25s ease;}
+.step.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+.block-tag{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;padding:5px 12px;border-radius:var(--radius-pill);margin:20px 0 4px;}
+.block-tag--req{background:var(--teal-100);color:var(--teal-800);}
+.block-tag--opt{background:var(--slate-200);color:var(--slate-600);}
+.block-intro{font-size:.92rem;color:var(--text-body);margin:0 0 8px;}
+
+.q-title{font-size:1.2rem;font-weight:700;color:var(--text-strong);margin:6px 0 2px;}
+.q-hint{font-size:.9rem;color:var(--text-muted);margin:0 0 16px;}
+
+label.field-label{display:block;font-weight:600;color:var(--text-strong);font-size:.95rem;margin:14px 0 6px;}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{
+  width:100%;font-family:var(--font-sans);font-size:1rem;color:var(--text-strong);
+  padding:12px 14px;border:1.5px solid var(--slate-300);border-radius:var(--radius-md);background:#fff;min-height:46px;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
+textarea{min-height:84px;resize:vertical;line-height:1.5;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 2px;}
+.chip{cursor:pointer;user-select:none;border:1.5px solid var(--slate-300);background:#fff;color:var(--slate-700);
+  padding:9px 14px;border-radius:var(--radius-pill);font-size:.9rem;font-weight:600;transition:all .15s;min-height:40px;display:inline-flex;align-items:center;}
+.chip:hover{border-color:var(--color-brand);}
+.chip.on{background:var(--teal-600);border-color:var(--teal-600);color:#fff;}
+.chip-note{font-size:.82rem;color:var(--text-muted);margin:6px 0 0;}
+.open-extra{margin-top:8px;}
+
+.example{background:var(--teal-50);border-left:3px solid var(--coral-500);border-radius:0 var(--radius-md) var(--radius-md) 0;
+  padding:10px 14px;font-size:.88rem;color:var(--slate-700);margin:0 0 14px;}
+.example b{color:var(--teal-800);}
+
+/* experience repeater */
+.exp{border:1px solid var(--slate-200);border-radius:var(--radius-md);padding:14px;margin-bottom:12px;background:var(--slate-50);}
+.exp .ex-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.exp .ex-head span{font-weight:700;color:var(--text-strong);font-size:.9rem;}
+.exp .rm{background:none;border:none;color:var(--red-600);font-weight:700;cursor:pointer;font-size:.82rem;padding:4px 6px;}
+.addbtn{background:transparent;color:var(--color-brand);border:1.5px dashed var(--slate-300);border-radius:var(--radius-md);
+  padding:10px 14px;font-weight:700;cursor:pointer;width:100%;font-family:var(--font-sans);font-size:.92rem;min-height:44px;}
+.addbtn:hover{border-color:var(--color-brand);background:var(--teal-50);}
+
+/* nav */
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--slate-200);}
+.btn{font-family:var(--font-sans);font-weight:700;border:none;cursor:pointer;border-radius:var(--radius-sm);
+  font-size:1rem;padding:12px 22px;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,transform .1s;}
+.btn:active{transform:scale(.98);}
+.btn--primary{background:var(--color-action);color:#fff;}
+.btn--primary:hover{background:var(--red-700);}
+.btn--brand{background:var(--color-brand);color:#fff;}
+.btn--brand:hover{background:var(--teal-700);}
+.btn--ghost{background:transparent;color:var(--slate-600);box-shadow:inset 0 0 0 1.5px var(--slate-300);}
+.btn--ghost:hover{background:var(--slate-100);}
+.btn[disabled]{opacity:.4;cursor:not-allowed;}
+.btn--wide{width:100%;}
+
+.skip-hint{text-align:center;font-size:.85rem;color:var(--text-muted);margin:14px 0 0;}
+
+/* result */
+.result-head{text-align:center;padding:10px 0 4px;}
+.result-head .check{width:54px;height:54px;border-radius:50%;background:var(--teal-100);color:var(--teal-700);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:26px;font-weight:800;}
+.result-head h2{font-size:1.4rem;color:var(--text-strong);margin:0 0 6px;}
+.result-head p{margin:0 auto;max-width:46ch;color:var(--text-body);font-size:.95rem;}
+
+.copybox{background:var(--slate-900);color:#e7edf5;border-radius:var(--radius-md);padding:16px;margin:18px 0;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;line-height:1.5;white-space:pre-wrap;
+  max-height:280px;overflow:auto;}
+.copied-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--teal-700);color:#fff;
+  padding:12px 22px;border-radius:var(--radius-pill);font-weight:700;font-size:.92rem;box-shadow:var(--shadow-md);
+  opacity:0;pointer-events:none;transition:opacity .25s;z-index:50;}
+.copied-toast.show{opacity:1;}
+
+.testnote{background:var(--coral-100);border-left:4px solid var(--coral-500);padding:12px 16px;font-size:.85rem;color:var(--slate-700);margin:0;}
+
+@media (max-width:520px){.row2{grid-template-columns:1fr;} .hd{padding:24px 18px;} .body{padding:8px 18px 28px;} .progress{padding:12px 18px;}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="progress">
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="label"><span id="stepLabel">Stap 1 van 6</span><span id="blockLabel">Verplicht</span></div>
+  </div>
+
+  <div class="hd">
+    <img src="https://care-almere.nl/wp-content/uploads/2023/06/Care-logo-212x100.png" alt="Care Almere">
+    <p class="eyebrow">Jobmatch · testversie</p>
+    <h1>Jouw verhaal op papier</h1>
+    <p>Vul in wat bij je past. Je hoeft geen mooie zinnen te maken, dat doen we daarna samen.</p>
+  </div>
+
+  <div class="body">
+    <p class="testnote" style="margin:14px 0 0;"><b>Dit is een testversie.</b> Vul hem in om een gevoel te krijgen voor de vorm en volgorde. Je antwoorden worden nergens opgeslagen of verstuurd; aan het eind kun je ze naar je klembord kopiëren.</p>
+
+    <!-- STEP 1 -->
+    <div class="step active" data-step="0" data-block="req">
+      <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
+      <p class="block-intro">Deze vragen vormen samen je cv.</p>
+      <h2 class="q-title">Hoe kunnen we je bereiken?</h2>
+      <p class="q-hint">Adres hoeft niet, je woonplaats is genoeg.</p>
+      <label class="field-label">Voor- en achternaam</label>
+      <input type="text" id="naam" placeholder="Bijvoorbeeld: Fatima El Amrani">
+      <div class="row2">
+        <div><label class="field-label">Telefoon</label><input type="tel" id="tel" placeholder="06 ..."></div>
+        <div><label class="field-label">Woonplaats</label><input type="text" id="plaats" placeholder="Almere"></div>
+      </div>
+      <div class="row2">
+        <div><label class="field-label">E-mail <span style="font-weight:400;color:var(--text-muted)">(als je die hebt)</span></label><input type="email" id="mail" placeholder="naam@voorbeeld.nl"></div>
+        <div><label class="field-label">Geboortedatum</label><input type="date" id="dob"></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: werk + opleiding -->
+    <div class="step" data-step="1" data-block="req">
+      <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
+      <h2 class="q-title">Werk dat je gedaan hebt</h2>
+      <p class="q-hint">Tel ook mee: vrijwilligerswerk, stage, mantelzorg, meewerken in een familiebedrijf, klussen voor anderen.</p>
+      <div class="example">Bijvoorbeeld: <b>twee jaar achter de kassa van een supermarkt</b>, of <b>drie jaar voor mijn moeder gezorgd</b>. Weet je het jaar niet precies? Schat het gerust.</div>
+      <div id="expList"></div>
+      <button class="addbtn" id="addExp">+ Werk of ervaring toevoegen</button>
+
+      <h2 class="q-title" style="margin-top:26px;">School en cursussen</h2>
+      <p class="q-hint">Een diploma is niet verplicht. Ook een korte cursus telt mee.</p>
+      <div class="example">Bijvoorbeeld: <b>vmbo niet afgemaakt, wel een heftruckcursus gehaald</b>.</div>
+      <textarea id="opleiding" placeholder="Schrijf op welke school of cursus je gedaan hebt, en of je een diploma hebt."></textarea>
+    </div>
+
+    <!-- STEP 3: papieren + talen -->
+    <div class="step" data-step="2" data-block="req">
+      <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
+      <h2 class="q-title">Papieren en pasjes</h2>
+      <p class="q-hint">Tik aan wat je hebt. Mis je er een? Vul hem zelf aan.</p>
+      <div class="chips" data-chips="papieren">
+        <span class="chip">Rijbewijs B</span><span class="chip">Heftruck</span><span class="chip">VCA</span>
+        <span class="chip">BHV / EHBO</span><span class="chip">Taalcertificaat</span>
+      </div>
+      <div class="open-extra"><input type="text" data-openfor="papieren" placeholder="Andere papieren of pasjes? Typ ze hier."></div>
+
+      <h2 class="q-title" style="margin-top:26px;">Talen die je spreekt</h2>
+      <p class="q-hint">Thuis, met vrienden, of voor anderen bellen telt allemaal mee.</p>
+      <div class="chips" data-chips="talen">
+        <span class="chip">Nederlands</span><span class="chip">Engels</span><span class="chip">Arabisch</span>
+        <span class="chip">Turks</span><span class="chip">Pools</span><span class="chip">Russisch</span>
+        <span class="chip">Chinees</span><span class="chip">Berbers</span><span class="chip">Spaans</span>
+        <span class="chip">Papiaments</span><span class="chip">Hindoestani</span>
+      </div>
+      <div class="open-extra"><input type="text" data-openfor="talen" placeholder="Andere taal? En hoe goed (een beetje / goed / heel goed)?"></div>
+    </div>
+
+    <!-- STEP 4: taken + helpen -->
+    <div class="step" data-step="3" data-block="req">
+      <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
+      <h2 class="q-title">Wat je vaak deed</h2>
+      <p class="q-hint">Kies iets dat je vaak deed, op werk of thuis.</p>
+      <div class="example">Bijvoorbeeld: <b>elke ochtend voor 10 mensen ontbijt klaarmaken</b>, of <b>elke week de planning maken voor vier collega's</b>.</div>
+      <textarea id="taak" placeholder="Wat deed je vaak? Schrijf er ook bij hoe vaak (per dag/week) en hoe lang per keer."></textarea>
+
+      <h2 class="q-title" style="margin-top:26px;">Wie je hielp of op weg zette</h2>
+      <p class="q-hint">Op het werk, in de buurt of in de familie, alles telt.</p>
+      <div class="example">Bijvoorbeeld: <b>een nieuwe collega ingewerkt</b>, of <b>mijn buurman geholpen met zijn post</b>.</div>
+      <textarea id="helpen" placeholder="Heb je weleens iemand iets geleerd, ingewerkt of geholpen? Wie, en wat?"></textarea>
+    </div>
+
+    <!-- STEP 5: apparaten + sterke punten + niet meer -->
+    <div class="step" data-step="4" data-block="req">
+      <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
+      <h2 class="q-title">Apparaten en programma's</h2>
+      <p class="q-hint">Ook een kassa of een app op je telefoon telt mee.</p>
+      <div class="chips" data-chips="apparaten">
+        <span class="chip">Kassasysteem</span><span class="chip">Apps op telefoon</span><span class="chip">Planningsapp</span>
+        <span class="chip">Machines</span><span class="chip">Computer / Office</span><span class="chip">Heftruck</span>
+      </div>
+      <div class="open-extra"><input type="text" data-openfor="apparaten" placeholder="Iets anders waar je mee gewerkt hebt? Typ het hier."></div>
+
+      <h2 class="q-title" style="margin-top:26px;">Wat anderen over je zeggen</h2>
+      <p class="q-hint">Tik aan wat past. Je mag er ook zelf een toevoegen.</p>
+      <div class="chips" data-chips="overjou">
+        <span class="chip">Rustig</span><span class="chip">Behulpzaam</span><span class="chip">Precies</span><span class="chip">Snel</span>
+        <span class="chip">Geduldig</span><span class="chip">Betrouwbaar</span><span class="chip">Vrolijk</span><span class="chip">Doorzetter</span>
+      </div>
+      <div class="open-extra"><input type="text" data-openfor="overjou" placeholder="Zegt iemand iets anders vaak over jou? Typ het hier."></div>
+
+      <h2 class="q-title" style="margin-top:26px;">Wat je liever niet meer doet</h2>
+      <p class="q-hint">Zo zoeken we werk dat beter bij je past.</p>
+      <div class="chips" data-chips="nietmeer">
+        <span class="chip">Avonddiensten</span><span class="chip">Veel mensen tegelijk</span><span class="chip">Zwaar tillen</span>
+        <span class="chip">Wisselende tijden</span><span class="chip">Alleen werken</span>
+      </div>
+      <div class="open-extra"><input type="text" data-openfor="nietmeer" placeholder="Iets anders, of waarom? Bijvoorbeeld: geen nachtdiensten, want ik zorg 's ochtends voor mijn kinderen."></div>
+    </div>
+
+    <!-- STEP 6: optioneel blok 2 -->
+    <div class="step" data-step="5" data-block="opt">
+      <span class="block-tag block-tag--opt">Blok 2 · Optioneel</span>
+      <p class="block-intro">Deze vragen hoef je niet in te vullen. Ze maken je cv persoonlijker en helpen je jobcoach. Geen tijd of zin? Sla ze gerust over, je cv is al compleet.</p>
+
+      <h2 class="q-title">Een keer dat het spannend werd</h2>
+      <div class="example">Bijvoorbeeld: <b>een klant werd boos en ik heb hem rustig geholpen</b>, of <b>de planning klopte niet en ik heb het opgelost</b>.</div>
+      <textarea id="opt_spannend" placeholder="Is er weleens iets misgegaan op werk of thuis? Wat deed je toen? (mag je overslaan)"></textarea>
+
+      <h2 class="q-title" style="margin-top:24px;">Geleerd van iemand om je heen</h2>
+      <div class="example">Bijvoorbeeld: <b>mijn oma leerde me koken voor grote groepen</b>.</div>
+      <textarea id="opt_geleerd" placeholder="Heeft iemand je iets geleerd buiten school of werk om? Wat, en van wie? (mag je overslaan)"></textarea>
+
+      <h2 class="q-title" style="margin-top:24px;">Een keer dat je voor jezelf opkwam</h2>
+      <textarea id="opt_grens" placeholder="Heb je weleens nee gezegd tegen iets dat niet ging? Tegen wie, en hoe ging dat? (mag je overslaan)"></textarea>
+
+      <p class="skip-hint">Klaar, of geen zin meer? Klik gewoon op afronden.</p>
+    </div>
+
+    <!-- RESULT -->
+    <div class="step" data-step="6" data-block="opt">
+      <div class="result-head">
+        <div class="check">✓</div>
+        <h2>Klaar! Dit is je verhaal.</h2>
+        <p>Hieronder staat de tekst die je in een chatbot plakt. De chatbot maakt er dan een cv en een motivatiebrief van. Druk op de knop, open je chatbot en plak.</p>
+      </div>
+      <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
+      <div class="copybox" id="preview"></div>
+      <p class="testnote"><b>Let op (testversie):</b> de instructie voor de chatbot is hier nog een voorbeeld-placeholder. De echte masterprompt bouwen we apart, dat bepaalt de kwaliteit van het eindresultaat.</p>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn--ghost" id="prevBtn">Terug</button>
+      <button class="btn btn--primary" id="nextBtn">Volgende</button>
+    </div>
+  </div>
+</div>
+
+<div class="copied-toast" id="toast">Gekopieerd naar klembord</div>
+
+<script>
+const steps = Array.from(document.querySelectorAll('.step'));
+const totalInput = 6; // 0..5 are input steps, 6 is result
+let cur = 0;
+const fill = document.getElementById('fill');
+const stepLabel = document.getElementById('stepLabel');
+const blockLabel = document.getElementById('blockLabel');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+function render(){
+  steps.forEach(s=>s.classList.toggle('active', +s.dataset.step===cur));
+  const onResult = cur===6;
+  const shown = Math.min(cur+1, totalInput);
+  fill.style.width = (onResult?100:(cur/totalInput*100))+'%';
+  stepLabel.textContent = onResult ? 'Klaar' : ('Stap '+shown+' van '+totalInput);
+  const block = steps.find(s=>+s.dataset.step===cur).dataset.block;
+  blockLabel.textContent = onResult ? '' : (block==='req'?'Verplicht':'Optioneel');
+  prevBtn.style.visibility = cur===0 ? 'hidden':'visible';
+  nextBtn.textContent = cur===5 ? 'Afronden' : (cur===6 ? 'Opnieuw' : 'Volgende');
+  if(onResult) buildPreview();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+prevBtn.onclick=()=>{ if(cur>0){cur--;render();} };
+nextBtn.onclick=()=>{ if(cur<6){cur++;render();} else {cur=0;render();} };
+
+/* chips */
+document.querySelectorAll('.chip').forEach(c=>{
+  c.onclick=()=>c.classList.toggle('on');
+});
+
+/* experience repeater */
+const expList=document.getElementById('expList');
+let expN=0;
+function addExp(){
+  expN++;
+  const id=expN;
+  const div=document.createElement('div');
+  div.className='exp';
+  div.innerHTML=`<div class="ex-head"><span>Ervaring ${id}</span><button class="rm" type="button">verwijderen</button></div>
+    <label class="field-label" style="margin-top:4px">Wat deed je? En waar?</label>
+    <input type="text" class="exp-wat" placeholder="Bijv. kassamedewerker bij Albert Heijn">
+    <div class="row2" style="margin-top:8px">
+      <div><label class="field-label" style="margin-top:0">Van (jaar)</label><input type="text" class="exp-van" inputmode="numeric" placeholder="2019"></div>
+      <div><label class="field-label" style="margin-top:0">Tot (jaar)</label><input type="text" class="exp-tot" inputmode="numeric" placeholder="2021 of 'nu'"></div>
+    </div>
+    <label class="field-label">Wat deed je daar zoal?</label>
+    <div class="example" style="margin-bottom:8px">Bijvoorbeeld: <b>kassa bediend, vakken gevuld, nieuwe collega's ingewerkt</b>.</div>
+    <textarea class="exp-taken" placeholder="Schrijf op welke taken je deed. Een paar steekwoorden is genoeg."></textarea>
+    <label class="field-label">Waar ben je trots op, of wat ging goed?</label>
+    <div class="example" style="margin-bottom:8px">Bijvoorbeeld: <b>nooit te laat geweest</b>, <b>klanten vroegen vaak naar mij</b>, of <b>geholpen de wachtrij korter te maken</b>. Niks te groots nodig, klein telt ook.</div>
+    <textarea class="exp-succes" placeholder="Wat ging goed in deze baan? (mag je ook leeg laten)"></textarea>`;
+  div.querySelector('.rm').onclick=()=>div.remove();
+  expList.appendChild(div);
+}
+document.getElementById('addExp').onclick=addExp;
+addExp();
+
+/* gather + preview */
+function chipsVal(key){
+  const on=Array.from(document.querySelectorAll(`[data-chips="${key}"] .chip.on`)).map(c=>c.textContent.trim());
+  const open=document.querySelector(`[data-openfor="${key}"]`);
+  if(open && open.value.trim()) on.push(open.value.trim());
+  return on;
+}
+function v(id){const e=document.getElementById(id);return e?e.value.trim():'';}
+function gather(){
+  const exp=Array.from(document.querySelectorAll('.exp')).map(e=>{
+    const wat=e.querySelector('.exp-wat').value.trim();
+    const van=e.querySelector('.exp-van').value.trim();
+    const tot=e.querySelector('.exp-tot').value.trim();
+    const taken=e.querySelector('.exp-taken').value.trim();
+    const succes=e.querySelector('.exp-succes').value.trim();
+    if(!wat&&!van&&!tot&&!taken&&!succes)return null;
+    let block=`- ${wat||'(functie niet ingevuld)'}${(van||tot)?` (${van||'?'}–${tot||'?'})`:''}`;
+    if(taken) block+=`\n    Taken: ${taken}`;
+    if(succes) block+=`\n    Trots op / ging goed: ${succes}`;
+    return block;
+  }).filter(Boolean);
+  return {
+    naam:v('naam'),tel:v('tel'),plaats:v('plaats'),mail:v('mail'),dob:v('dob'),
+    exp,opleiding:v('opleiding'),
+    papieren:chipsVal('papieren'),talen:chipsVal('talen'),apparaten:chipsVal('apparaten'),
+    overjou:chipsVal('overjou'),nietmeer:chipsVal('nietmeer'),
+    taak:v('taak'),helpen:v('helpen'),
+    spannend:v('opt_spannend'),geleerd:v('opt_geleerd'),grens:v('opt_grens')
+  };
+}
+function line(label,val){ if(!val|| (Array.isArray(val)&&!val.length))return ''; return `${label}: ${Array.isArray(val)?val.join(', '):val}\n`; }
+
+const MASTERPROMPT_PLACEHOLDER =
+`### INSTRUCTIE VOOR DE CHATBOT (voorbeeld-placeholder, nog niet de definitieve masterprompt) ###
+Je bent een ervaren jobcoach-assistent. Maak op basis van onderstaande gegevens (1) een helder, eerlijk cv en (2) een korte motivatiebrief, in het Nederlands, in warme en toegankelijke taal. Verzin niets bij wat er niet staat. Maak onderschatte ervaring (vrijwilligerswerk, mantelzorg, informeel helpen) zichtbaar als echte vaardigheden. Vraag door als iets onduidelijk is.
+`;
+
+function buildPreview(){
+  const d=gather();
+  let t=MASTERPROMPT_PLACEHOLDER+`\n### GEGEVENS VAN DE KANDIDAAT ###\n\n`;
+  t+=`-- Contact --\n`;
+  t+=line('Naam',d.naam)+line('Telefoon',d.tel)+line('Woonplaats',d.plaats)+line('E-mail',d.mail)+line('Geboortedatum',d.dob);
+  t+=`\n-- Werk en ervaring --\n`+(d.exp.length?d.exp.join('\n')+'\n':'(niet ingevuld)\n');
+  t+=line('\nOpleiding/cursussen',d.opleiding);
+  t+=`\n-- Vaardigheden --\n`;
+  t+=line('Papieren/pasjes',d.papieren)+line('Talen',d.talen)+line('Apparaten/programma\'s',d.apparaten);
+  t+=line('Wat je vaak deed',d.taak)+line('Wie je hielp/op weg zette',d.helpen);
+  t+=line('Anderen zeggen over jou',d.overjou)+line('Liever niet meer',d.nietmeer);
+  const opt=[line('Een keer dat het spannend werd',d.spannend),line('Geleerd van iemand',d.geleerd),line('Voor jezelf opgekomen',d.grens)].join('');
+  if(opt.trim()) t+=`\n-- Extra (optioneel) --\n`+opt;
+  document.getElementById('preview').textContent=t.trim();
+}
+
+document.getElementById('copyBtn').onclick=async()=>{
+  const txt=document.getElementById('preview').textContent;
+  try{ await navigator.clipboard.writeText(txt); }
+  catch(e){ const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove(); }
+  const toast=document.getElementById('toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);
+};
+
+render();
+</script>
+</body>
+</html>
