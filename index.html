@@ -81,6 +81,18 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
   padding:10px 14px;font-weight:700;cursor:pointer;width:100%;font-family:var(--font-sans);font-size:.92rem;min-height:44px;}
 .addbtn:hover{border-color:var(--color-brand);background:var(--teal-50);}
 
+/* style picker */
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 2px;}
+.style-card{cursor:pointer;border:2px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;
+  padding:10px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;
+  transition:border-color .15s,box-shadow .15s;}
+.style-card:hover{border-color:var(--color-brand);}
+.style-card.on{border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
+.style-card svg{width:100%;height:auto;display:block;}
+.style-card .style-name{font-size:.85rem;font-weight:700;color:var(--text-strong);}
+.style-card .style-check{font-size:.78rem;font-weight:600;color:var(--text-muted);}
+.style-card.on .style-check{color:var(--teal-700);}
+
 /* nav */
 .nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--slate-200);}
 .btn{font-family:var(--font-sans);font-weight:700;border:none;cursor:pointer;border-radius:var(--radius-sm);
@@ -248,11 +260,20 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <h2 class="q-title" style="margin-top:24px;">Een keer dat je voor jezelf opkwam</h2>
       <textarea id="opt_grens" placeholder="Heb je weleens nee gezegd tegen iets dat niet ging? Tegen wie, en hoe ging dat? (mag je overslaan)"></textarea>
 
-      <p class="skip-hint">Klaar, of geen zin meer? Klik gewoon op afronden.</p>
+      <p class="skip-hint">Klaar, of geen zin meer? Klik op volgende, daarna kies je nog hoe je cv eruitziet.</p>
+    </div>
+
+    <!-- STEP 7: stijlkeuze -->
+    <div class="step" data-step="6" data-block="req">
+      <span class="block-tag block-tag--req">Laatste stap · Kies je stijl</span>
+      <h2 class="q-title">Hoe wil je dat je cv eruitziet?</h2>
+      <p class="q-hint">Kies de stijl die je het mooist vindt. Je ziet hieronder een voorbeeld van de kleur en opmaak.</p>
+      <div class="style-grid" id="styleGrid"></div>
+      <p class="chip-note">Je kiest er één. Twijfel je? Kies gewoon de kleur die je het mooist vindt, je jobcoach helpt je later verder.</p>
     </div>
 
     <!-- RESULT -->
-    <div class="step" data-step="6" data-block="opt">
+    <div class="step" data-step="7" data-block="opt">
       <div class="result-head">
         <div class="check">✓</div>
         <h2>Klaar! Dit is je verhaal.</h2>
@@ -260,7 +281,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       </div>
       <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
       <div class="copybox" id="preview"></div>
-      <p class="testnote"><b>Let op (testversie):</b> de instructie voor de chatbot is hier nog een voorbeeld-placeholder. De echte masterprompt bouwen we apart, dat bepaalt de kwaliteit van het eindresultaat.</p>
+      <p class="testnote"><b>Let op (testversie):</b> de instructie voor de chatbot (de masterprompt) zit nu in dit blok verwerkt, inclusief de stijl die je koos. De voorbeeldstijlen zijn nog tijdelijk (zes kleuren van dezelfde klassieke opmaak); de echte stijlen volgen later.</p>
     </div>
 
     <div class="nav">
@@ -272,9 +293,10 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 
 <div class="copied-toast" id="toast">Gekopieerd naar klembord</div>
 
+<script src="masterprompt.js"></script>
 <script>
 const steps = Array.from(document.querySelectorAll('.step'));
-const totalInput = 6; // 0..5 are input steps, 6 is result
+const totalInput = 7; // 0..6 are input steps, 7 is result
 let cur = 0;
 const fill = document.getElementById('fill');
 const stepLabel = document.getElementById('stepLabel');
@@ -284,19 +306,19 @@ const nextBtn = document.getElementById('nextBtn');
 
 function render(){
   steps.forEach(s=>s.classList.toggle('active', +s.dataset.step===cur));
-  const onResult = cur===6;
+  const onResult = cur===7;
   const shown = Math.min(cur+1, totalInput);
   fill.style.width = (onResult?100:(cur/totalInput*100))+'%';
   stepLabel.textContent = onResult ? 'Klaar' : ('Stap '+shown+' van '+totalInput);
   const block = steps.find(s=>+s.dataset.step===cur).dataset.block;
   blockLabel.textContent = onResult ? '' : (block==='req'?'Verplicht':'Optioneel');
   prevBtn.style.visibility = cur===0 ? 'hidden':'visible';
-  nextBtn.textContent = cur===5 ? 'Afronden' : (cur===6 ? 'Opnieuw' : 'Volgende');
+  nextBtn.textContent = cur===6 ? 'Afronden' : (cur===7 ? 'Opnieuw' : 'Volgende');
   if(onResult) buildPreview();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 prevBtn.onclick=()=>{ if(cur>0){cur--;render();} };
-nextBtn.onclick=()=>{ if(cur<6){cur++;render();} else {cur=0;render();} };
+nextBtn.onclick=()=>{ if(cur<7){cur++;render();} else {cur=0;render();} };
 
 /* chips */
 document.querySelectorAll('.chip').forEach(c=>{
@@ -330,6 +352,73 @@ function addExp(){
 document.getElementById('addExp').onclick=addExp;
 addExp();
 
+/* style picker
+   Voorlopig: zes keer dezelfde klassieke cv-stijl in een andere accentkleur,
+   zodat de keuzestap tastbaar is. De echte, uiteenlopende stijlen volgen later;
+   vervang dan de inhoud van STYLES (kleur, naam en omschrijving per stijl). */
+const STYLES = [
+  {id:'klassiek-antraciet', naam:'Klassiek Antraciet', accent:'#2b2f36'},
+  {id:'klassiek-diepblauw', naam:'Klassiek Diepblauw', accent:'#1f3a5f'},
+  {id:'klassiek-bordeaux',  naam:'Klassiek Bordeaux',  accent:'#7a2630'},
+  {id:'klassiek-bosgroen',  naam:'Klassiek Bosgroen',  accent:'#1f5132'},
+  {id:'klassiek-teal',      naam:'Klassiek Teal',      accent:'#017371'},
+  {id:'klassiek-warmbruin', naam:'Klassiek Warmbruin', accent:'#6b4423'}
+];
+let selectedStyle = null;
+
+/* Mini-voorbeeld van een klassiek cv in de gekozen accentkleur. */
+function stylePreviewSVG(accent){
+  return `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+    <rect x="0" y="0" width="120" height="160" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <rect x="10" y="12" width="62" height="9" rx="1.5" fill="${accent}"/>
+    <rect x="10" y="25" width="44" height="4" rx="1" fill="#cbd5e1"/>
+    <rect x="92" y="10" width="20" height="20" fill="#ffffff" stroke="${accent}" stroke-width="1.5"/>
+    <rect x="10" y="37" width="100" height="2" fill="${accent}"/>
+    <rect x="10" y="47" width="30" height="5" rx="1" fill="${accent}"/>
+    <rect x="10" y="56" width="96" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="62" width="90" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="68" width="84" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="82" width="34" height="5" rx="1" fill="${accent}"/>
+    <rect x="10" y="91" width="96" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="97" width="92" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="103" width="70" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="117" width="28" height="5" rx="1" fill="${accent}"/>
+    <rect x="10" y="126" width="96" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="132" width="88" height="3" rx="1" fill="#e2e8f0"/>
+    <rect x="10" y="138" width="60" height="3" rx="1" fill="#e2e8f0"/>
+  </svg>`;
+}
+
+/* Uitgebreide beschrijving die in de prompt belandt voor de gekozen stijl.
+   Nu nog een voorlopige tekst per accentkleur; vervang per definitieve stijl. */
+function styleDescription(st){
+  return `De kandidaat heeft gekozen voor de stijl "${st.naam}".
+
+(Dit is nog een voorlopige stijlbeschrijving; de definitieve stijlen volgen later.)
+
+Bouw het cv in een klassieke, verzorgde opmaak met "${st.naam}" als accentkleur:
+- Sober en zakelijk, met een rustige, goed leesbare indeling.
+- Gebruik de accentkleur terughoudend: voor de naam bovenaan, de koppen van de onderdelen en een dunne scheidingslijn onder de naam. Houd de lopende tekst in zwart of donkergrijs.
+- Lettertype: een schreef-lettertype (zoals Georgia of Times New Roman) voor de naam en koppen, en een schreefloos lettertype (zoals Arial of Calibri) voor de lopende tekst.
+- Foto rechtsboven, vierkant bijgesneden (als de kandidaat een foto meestuurt).
+- Zorg dat het cv er ook netjes uitziet wanneer het in zwart-wit wordt afgedrukt.`;
+}
+
+function renderStyles(){
+  const grid=document.getElementById('styleGrid');
+  grid.innerHTML='';
+  STYLES.forEach(st=>{
+    const card=document.createElement('div');
+    card.className='style-card'+(selectedStyle===st.id?' on':'');
+    card.innerHTML=stylePreviewSVG(st.accent)
+      +`<span class="style-name">${st.naam}</span>`
+      +`<span class="style-check">${selectedStyle===st.id?'Gekozen ✓':'Kies deze'}</span>`;
+    card.onclick=()=>{ selectedStyle=st.id; renderStyles(); };
+    grid.appendChild(card);
+  });
+}
+renderStyles();
+
 /* gather + preview */
 function chipsVal(key){
   const on=Array.from(document.querySelectorAll(`[data-chips="${key}"] .chip.on`)).map(c=>c.textContent.trim());
@@ -362,14 +451,15 @@ function gather(){
 }
 function line(label,val){ if(!val|| (Array.isArray(val)&&!val.length))return ''; return `${label}: ${Array.isArray(val)?val.join(', '):val}\n`; }
 
-const MASTERPROMPT_PLACEHOLDER =
-`### INSTRUCTIE VOOR DE CHATBOT (voorbeeld-placeholder, nog niet de definitieve masterprompt) ###
-Je bent een ervaren jobcoach-assistent. Maak op basis van onderstaande gegevens (1) een helder, eerlijk cv en (2) een korte motivatiebrief, in het Nederlands, in warme en toegankelijke taal. Verzin niets bij wat er niet staat. Maak onderschatte ervaring (vrijwilligerswerk, mantelzorg, informeel helpen) zichtbaar als echte vaardigheden. Vraag door als iets onduidelijk is.
-`;
+/* Fallback voor [STIJL_PLACEHOLDER] als de kandidaat geen stijl heeft gekozen. */
+const STIJL_FALLBACK = 'De kandidaat heeft geen stijl gekozen. Kies zelf een passende, klassieke stijl, of vraag de kandidaat kort naar een voorkeur.';
 
 function buildPreview(){
   const d=gather();
-  let t=MASTERPROMPT_PLACEHOLDER+`\n### GEGEVENS VAN DE KANDIDAAT ###\n\n`;
+  const st=STYLES.find(s=>s.id===selectedStyle);
+  const stijl=st?styleDescription(st):STIJL_FALLBACK;
+  const prompt=MASTERPROMPT.replace('[STIJL_PLACEHOLDER]', stijl);
+  let t=prompt+`\n\n---\n\n### GEGEVENS VAN DE KANDIDAAT ###\n\n`;
   t+=`-- Contact --\n`;
   t+=line('Naam',d.naam)+line('Telefoon',d.tel)+line('Woonplaats',d.plaats)+line('E-mail',d.mail)+line('Geboortedatum',d.dob);
   t+=`\n-- Werk en ervaring --\n`+(d.exp.length?d.exp.join('\n')+'\n':'(niet ingevuld)\n');
