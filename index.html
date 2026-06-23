@@ -93,6 +93,19 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .style-card .style-check{font-size:.78rem;font-weight:600;color:var(--text-muted);}
 .style-card.on .style-check{color:var(--teal-700);}
 
+/* color picker */
+.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 2px;}
+.color-card{cursor:pointer;border:2px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;
+  padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;
+  transition:border-color .15s,box-shadow .15s;min-height:44px;}
+.color-card:hover{border-color:var(--color-brand);}
+.color-card.on{border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
+.color-card .swatches{display:flex;gap:6px;}
+.color-card .swatches span{width:24px;height:24px;border-radius:50%;border:1px solid rgba(15,23,42,.08);}
+.color-card .color-name{font-size:.85rem;font-weight:700;color:var(--text-strong);}
+.color-card .color-check{font-size:.78rem;font-weight:600;color:var(--text-muted);}
+.color-card.on .color-check{color:var(--teal-700);}
+
 /* nav */
 .nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--slate-200);}
 .btn{font-family:var(--font-sans);font-weight:700;border:none;cursor:pointer;border-radius:var(--radius-sm);
@@ -265,11 +278,16 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 
     <!-- STEP 7: stijlkeuze -->
     <div class="step" data-step="6" data-block="req">
-      <span class="block-tag block-tag--req">Laatste stap · Kies je stijl</span>
+      <span class="block-tag block-tag--req">Laatste stap · Stijl en kleur</span>
       <h2 class="q-title">Hoe wil je dat je cv eruitziet?</h2>
-      <p class="q-hint">Kies de stijl die je het mooist vindt. Je ziet hieronder een voorbeeld van de kleur en opmaak.</p>
+      <p class="q-hint">Kies eerst een stijl. Je ziet hieronder een voorbeeld van de opmaak.</p>
       <div class="style-grid" id="styleGrid"></div>
-      <p class="chip-note">Je kiest er één. Twijfel je? Kies gewoon de kleur die je het mooist vindt, je jobcoach helpt je later verder.</p>
+      <p class="chip-note">Je kiest er één. Twijfel je? Kies gewoon de stijl die je het mooist vindt, je jobcoach helpt je later verder.</p>
+
+      <h2 class="q-title" style="margin-top:26px;">En welk kleurenschema?</h2>
+      <p class="q-hint">Kies daarna de kleuren die in je cv gebruikt worden.</p>
+      <div class="color-grid" id="colorGrid"></div>
+      <p class="chip-note">Ook hier kies je er één.</p>
     </div>
 
     <!-- RESULT -->
@@ -389,18 +407,15 @@ function stylePreviewSVG(accent){
   </svg>`;
 }
 
-/* Uitgebreide beschrijving die in de prompt belandt voor de gekozen stijl.
-   Nu nog een voorlopige tekst per accentkleur; vervang per definitieve stijl. */
+/* Beschrijving van de gekozen stijl (de opmaak/indeling). De kleur komt
+   apart uit het gekozen kleurenschema; deze tekst is dus kleur-neutraal.
+   Nu nog een voorlopige tekst; vervang per definitieve stijl. */
 function styleDescription(st){
-  return `De kandidaat heeft gekozen voor de stijl "${st.naam}".
-
-(Dit is nog een voorlopige stijlbeschrijving; de definitieve stijlen volgen later.)
-
-Bouw het cv in een klassieke, verzorgde opmaak met "${st.naam}" als accentkleur:
+  return `(Dit is nog een voorlopige stijl; de definitieve stijlen volgen later.) Bouw het cv in een klassieke, verzorgde opmaak:
 - Sober en zakelijk, met een rustige, goed leesbare indeling.
-- Gebruik de accentkleur terughoudend: voor de naam bovenaan, de koppen van de onderdelen en een dunne scheidingslijn onder de naam. Houd de lopende tekst in zwart of donkergrijs.
 - Lettertype: een schreef-lettertype (zoals Georgia of Times New Roman) voor de naam en koppen, en een schreefloos lettertype (zoals Arial of Calibri) voor de lopende tekst.
 - Foto rechtsboven, vierkant bijgesneden (als de kandidaat een foto meestuurt).
+- Gebruik het gekozen kleurenschema (zie hieronder) terughoudend voor de accenten; houd de lopende tekst in zwart of donkergrijs.
 - Zorg dat het cv er ook netjes uitziet wanneer het in zwart-wit wordt afgedrukt.`;
 }
 
@@ -418,6 +433,51 @@ function renderStyles(){
   });
 }
 renderStyles();
+
+/* color picker
+   De deelnemer kiest na de stijl een kleurenschema. Pas de kleuren of namen
+   hier aan als de definitieve schema's bekend zijn. */
+const COLOR_SCHEMES = [
+  {id:'care-teal',   naam:'Care Teal',          hoofd:'teal',              accent:'zacht groenblauw', kleuren:['#017371','#018a89','#d6efee']},
+  {id:'diepblauw',   naam:'Diepblauw',          hoofd:'diepblauw',         accent:'lichtblauw',       kleuren:['#1f3a5f','#2f5a8f','#dce7f3']},
+  {id:'bordeaux',    naam:'Warm bordeaux',      hoofd:'bordeauxrood',      accent:'zacht roze',       kleuren:['#7a2630','#a8434f','#f3dce0']},
+  {id:'bosgroen',    naam:'Bosgroen',           hoofd:'bosgroen',          accent:'zacht groen',      kleuren:['#1f5132','#357a4f','#dcefe3']},
+  {id:'klassiek-zw', naam:'Zwart-wit klassiek', hoofd:'antraciet/zwart',   accent:'grijs',            kleuren:['#1e293b','#475569','#e2e8f0']},
+  {id:'warm-zand',   naam:'Warm zand',          hoofd:'warmbruin',         accent:'zandkleur',        kleuren:['#6b4423','#a06a3a','#f0e6d8']}
+];
+let selectedColor = null;
+
+function renderColors(){
+  const grid=document.getElementById('colorGrid');
+  grid.innerHTML='';
+  COLOR_SCHEMES.forEach(cs=>{
+    const card=document.createElement('div');
+    card.className='color-card'+(selectedColor===cs.id?' on':'');
+    const sw=cs.kleuren.map(k=>`<span style="background:${k}"></span>`).join('');
+    card.innerHTML=`<div class="swatches">${sw}</div>`
+      +`<span class="color-name">${cs.naam}</span>`
+      +`<span class="color-check">${selectedColor===cs.id?'Gekozen ✓':'Kies deze'}</span>`;
+    card.onclick=()=>{ selectedColor=cs.id; renderColors(); };
+    grid.appendChild(card);
+  });
+}
+renderColors();
+
+/* Combineert de gekozen stijl en het gekozen kleurenschema tot één instructie
+   die onder de deelnemer-input in de te kopieren prompt komt. */
+function opmaakBlok(){
+  const st=STYLES.find(s=>s.id===selectedStyle);
+  const cs=COLOR_SCHEMES.find(c=>c.id===selectedColor);
+  if(!st && !cs) return '';
+  let out=`\n-- Door de deelnemer gekozen opmaak --\n`;
+  out+= st
+    ? `Gekozen stijl: ${st.naam}.\n${styleDescription(st)}\n`
+    : `Gekozen stijl: geen. Kies zelf een passende, klassieke stijl.\n`;
+  out+= cs
+    ? `\nGekozen kleurenschema: ${cs.naam} (hoofdkleur ${cs.hoofd}, accent ${cs.accent}; kleurcodes ${cs.kleuren.join(', ')}).\nGebruik deze kleuren voor de accenten van het cv: de naam bovenaan, de koppen en de scheidingslijnen. Houd de lopende tekst donker en goed leesbaar.\n`
+    : `\nGekozen kleurenschema: geen. Kies zelf een rustig, professioneel kleurenschema.\n`;
+  return out;
+}
 
 /* gather + preview */
 function chipsVal(key){
@@ -456,8 +516,9 @@ const STIJL_FALLBACK = 'De kandidaat heeft geen stijl gekozen. Kies zelf een pas
 
 function buildPreview(){
   const d=gather();
-  const st=STYLES.find(s=>s.id===selectedStyle);
-  const stijl=st?styleDescription(st):STIJL_FALLBACK;
+  const stijl=(selectedStyle||selectedColor)
+    ? 'De kandidaat heeft zelf een stijl en een kleurenschema gekozen. Die keuze staat onderaan, bij de gegevens van de kandidaat, onder het kopje "Door de deelnemer gekozen opmaak". Houd die keuze aan voor de opmaak en de kleuren.'
+    : STIJL_FALLBACK;
   const prompt=MASTERPROMPT.replace('[STIJL_PLACEHOLDER]', stijl);
   let t=prompt+`\n\n---\n\n### GEGEVENS VAN DE KANDIDAAT ###\n\n`;
   t+=`-- Contact --\n`;
@@ -470,6 +531,7 @@ function buildPreview(){
   t+=line('Anderen zeggen over jou',d.overjou)+line('Liever niet meer',d.nietmeer);
   const opt=[line('Een keer dat het spannend werd',d.spannend),line('Geleerd van iemand',d.geleerd),line('Voor jezelf opgekomen',d.grens)].join('');
   if(opt.trim()) t+=`\n-- Extra (optioneel) --\n`+opt;
+  t+=opmaakBlok();
   document.getElementById('preview').textContent=t.trim();
 }
 
