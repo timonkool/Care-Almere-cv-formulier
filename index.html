@@ -183,6 +183,12 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .iter-copy:hover{background:var(--teal-700);}
 .iter-copy:active{transform:scale(.98);}
 
+/* opvallende 'lees eerst de stappen'-banner bovenaan de resultaatpagina */
+.read-first{display:flex;gap:12px;align-items:center;background:var(--teal-600);color:#fff;
+  border-radius:var(--radius-md);padding:14px 18px;margin:16px 0 8px;box-shadow:var(--shadow-sm);font-size:.95rem;}
+.read-first .rf-ico{font-size:1.6rem;line-height:1;flex:none;}
+.read-first b{font-weight:800;}
+
 @media (max-width:520px){.row2{grid-template-columns:1fr;} .hd{padding:24px 18px;} .body{padding:8px 18px 28px;} .progress{padding:12px 18px;}}
 </style>
 </head>
@@ -337,10 +343,13 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <div class="result-head">
         <div class="check">✓</div>
         <h2>Klaar! Dit is je verhaal.</h2>
-        <p>Hieronder staat de tekst voor de chatbot. Volg de stappen, dan heb je zo je eigen cv en motivatiebrief.</p>
+        <p>Je verhaal is klaar. Volg eerst de stappen, dan heb je zo je eigen cv en motivatiebrief.</p>
       </div>
-      <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
-      <div class="copybox" id="preview"></div>
+
+      <div class="read-first">
+        <span class="rf-ico" aria-hidden="true">👇</span>
+        <span><b>Lees eerst de stappen hieronder.</b> De knop om je tekst te kopiëren staat onderaan deze pagina.</span>
+      </div>
 
       <h3 class="next-title">Wat doe je nu? Zes kleine stappen</h3>
       <p class="next-intro">Een chatbot is een website waar je iets typt en meteen antwoord krijgt. Je laat de chatbot van jouw tekst een cv maken. Volg de stappen rustig, eentje tegelijk.</p>
@@ -348,7 +357,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <ol class="steps-next">
         <li>
           <p class="s-head">1. Kopieer je tekst</p>
-          <p class="s-body">Klik hierboven op de groene knop "Kopieer naar klembord". Je tekst staat nu klaar om te plakken. Klaar? Ga door naar stap 2.</p>
+          <p class="s-body">Heb je alle stappen gelezen? Klik dan onderaan deze pagina op de groene knop "Kopieer naar klembord". Je tekst staat dan klaar om te plakken. Klaar? Ga door naar stap 2.</p>
         </li>
         <li>
           <p class="s-head">2. Open een chatbot</p>
@@ -404,7 +413,12 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         </li>
       </ol>
 
-      <p class="infonote" style="margin-top:24px;"><b>Let op:</b> de instructie voor de chatbot (de masterprompt) zit in de gekopieerde tekst verwerkt, inclusief het template en de kleur die je koos. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
+      <h3 class="next-title">Je tekst om te kopiëren</h3>
+      <p class="next-intro">Heb je de stappen gelezen? Kopieer dan hier je tekst en ga verder bij stap 2 hierboven.</p>
+      <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
+      <div class="copybox" id="preview"></div>
+
+      <p class="infonote" style="margin-top:18px;"><b>Let op:</b> de instructie voor de chatbot (de masterprompt) zit in de gekopieerde tekst verwerkt, inclusief het template en de kleur die je koos. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
     </div>
 
     <p class="val-msg" id="valMsg"></p>
