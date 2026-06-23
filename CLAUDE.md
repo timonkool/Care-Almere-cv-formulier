@@ -11,13 +11,13 @@ Het doel van dit project is bewust klein en snel: kleine iteraties doen op één
 **Eigenaar:** Timon Kool
 **Context:** Vrijwilligerswerk voor Stichting Care Almere, een Nederlandse stichting gericht op armoedebestrijding. Dit formulier hoort bij het Jobmatch-traject (jobcoaching via Missiecentrum De Wegwijzer), in samenwerking met Georgina (jobcoach).
 **Doel van het formulier:** Een kandidaat vult zelf het formulier in. Bij afronden genereert de pagina één tekstblok (masterprompt + de antwoorden) dat de kandidaat met één druk op de knop naar het klembord kopieert en in een chatbot naar keuze plakt. Daar rolt een cv en een motivatiebrief uit. De pagina roept zelf geen AI aan.
-**Status:** Testversie, live, in ontwikkeling. Wordt iteratief aangescherpt, mede op basis van input van Georgina en van testkandidaten.
+**Status:** Live en in gebruik, definitieve versie. Wordt iteratief aangescherpt, mede op basis van input van Georgina en van kandidaten.
 
 **Tech:** Eén `index.html` met inline CSS en vanille JavaScript. Geen React, geen Vite, geen build-stap, geen npm-packages. Geen externe libraries behalve eventueel Google Fonts via `<link>`.
 
 **Hosting / deploy:** GitHub-repository gekoppeld aan timonkool.nl. **Een push naar `main` zet de wijziging direct live.** Er is geen aparte build of preview-omgeving. Behandel elke commit naar `main` dus als een publicatie.
 
-**Live op:** `http://timonkool.nl/Care-Almere-cv-formulier-test/`
+**Live op:** `http://timonkool.nl/Care-Almere-cv-formulier/`
 
 **Branch:** Alles direct naar `main`. Geen feature branches.
 
