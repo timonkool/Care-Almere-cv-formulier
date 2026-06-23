@@ -173,6 +173,16 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .photo-tip .pt-text{font-size:.92rem;color:var(--slate-700);}
 .photo-tip .pt-text b{color:var(--teal-800);}
 
+/* iteratie-tips met kopieerbare prompts op de resultaatpagina */
+.iter{border:1.5px solid var(--teal-100);background:var(--teal-50);border-radius:var(--radius-md);padding:14px 16px;margin:0 0 12px;}
+.iter-head{font-weight:700;color:var(--text-strong);font-size:.96rem;margin:0 0 8px;}
+.iter-prompt{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-sm);padding:10px 12px;
+  font-size:.9rem;color:var(--slate-700);line-height:1.5;}
+.iter-copy{margin-top:10px;background:var(--color-brand);color:#fff;border:none;border-radius:var(--radius-sm);
+  font-family:var(--font-sans);font-weight:700;font-size:.9rem;padding:9px 16px;min-height:42px;cursor:pointer;}
+.iter-copy:hover{background:var(--teal-700);}
+.iter-copy:active{transform:scale(.98);}
+
 @media (max-width:520px){.row2{grid-template-columns:1fr;} .hd{padding:24px 18px;} .body{padding:8px 18px 28px;} .progress{padding:12px 18px;}}
 </style>
 </head>
@@ -317,6 +327,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <span class="block-tag block-tag--req">Laatste stap · Kies je opmaak</span>
       <h2 class="q-title">Hoe wil je dat je cv eruitziet?</h2>
       <p class="q-hint">Kies een ontwerp dat je mooi vindt. Tik daarna onder dat ontwerp op een kleur, dan zie je het voorbeeld in die kleur.</p>
+      <p class="infonote" style="margin:6px 0 14px;"><b>Let op:</b> deze ontwerpen geven een indruk van de stijl. Je cv wordt een benadering van het voorbeeld, geen exacte kopie. De chatbot bouwt de stijl zo goed mogelijk na met jouw eigen gegevens.</p>
       <div class="tpl-grid" id="tplGrid"></div>
       <p class="chip-note">Je kiest één ontwerp met één kleur. Twijfel je? Kies gewoon wat je het mooist vindt, je jobcoach helpt je later verder.</p>
     </div>
@@ -331,7 +342,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
       <div class="copybox" id="preview"></div>
 
-      <h3 class="next-title">Wat doe je nu? Vijf kleine stappen</h3>
+      <h3 class="next-title">Wat doe je nu? Zes kleine stappen</h3>
       <p class="next-intro">Een chatbot is een website waar je iets typt en meteen antwoord krijgt. Je laat de chatbot van jouw tekst een cv maken. Volg de stappen rustig, eentje tegelijk.</p>
 
       <ol class="steps-next">
@@ -362,6 +373,34 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         <li>
           <p class="s-head">5. Beantwoord de vragen en download je cv</p>
           <p class="s-body">De chatbot stelt je nog een paar korte vragen. Beantwoord ze in je eigen woorden. Daarna krijg je een Word-bestand (.docx) dat je kunt opslaan, aanpassen en printen. Stuur het naar je jobcoach bij Care Almere, zij helpt je het af te ronden.</p>
+        </li>
+        <li>
+          <p class="s-head">6. Wil je je cv nog sterker maken? (extra)</p>
+          <p class="s-body">Heb je je cv binnen? Dan kun je het in dezelfde chat samen met de chatbot stap voor stap verbeteren. Doe de vier tips hieronder rustig op volgorde: kopieer telkens de tekst, plak hem in de chat en verstuur.</p>
+
+          <div class="iter">
+            <p class="iter-head">1. Laat een recruiter naar je cv kijken</p>
+            <div class="iter-prompt" id="ip1">Wil je nu naar mijn cv kijken als ervaren recruiter? Geef me eerlijke, opbouwende feedback in makkelijke taal: wat is sterk, wat mist er nog, en wat zou jij aanpassen zodat ik meer kans maak bij werkgevers. Gebruik korte punten.</div>
+            <button class="iter-copy" type="button" data-copy="ip1">Kopieer deze tekst</button>
+          </div>
+
+          <div class="iter">
+            <p class="iter-head">2. Laat een jobcoach vragen stellen</p>
+            <div class="iter-prompt" id="ip2">Wil je nu mijn jobcoach zijn? Stel me, op basis van mijn cv en de feedback van de recruiter, een paar korte vragen, één voor één. Zo verzamelen we samen meer over mijn ervaring en sterke kanten om mijn cv te verrijken. Houd de vragen simpel en stel ze niet allemaal tegelijk.</div>
+            <button class="iter-copy" type="button" data-copy="ip2">Kopieer deze tekst</button>
+          </div>
+
+          <div class="iter">
+            <p class="iter-head">3. Laat een sollicitatiecoach je cv herschrijven</p>
+            <div class="iter-prompt" id="ip3">Wil je nu als sollicitatiecoach mijn cv herschrijven? Gebruik de feedback van de recruiter en mijn antwoorden op je vragen om mijn cv sterker en duidelijker te maken. Houd dezelfde stijl en opmaak aan en lever het weer als Word-document (.docx).</div>
+            <button class="iter-copy" type="button" data-copy="ip3">Kopieer deze tekst</button>
+          </div>
+
+          <div class="iter">
+            <p class="iter-head">4. Laat een vormgever de opmaak perfectioneren</p>
+            <div class="iter-prompt" id="ip4">Wil je nu als vormgever de opmaak van mijn cv nalopen en perfectioneren? Let op een nette indeling, rechte uitlijning, rustige witruimte, en dat alles netjes op hele pagina's past zonder losse stukjes op een bijna lege pagina. Houd de gekozen stijl en kleur aan en lever het weer als Word-document (.docx).</div>
+            <button class="iter-copy" type="button" data-copy="ip4">Kopieer deze tekst</button>
+          </div>
         </li>
       </ol>
 
@@ -590,12 +629,14 @@ function buildPreview(){
   document.getElementById('preview').textContent=t.trim();
 }
 
-document.getElementById('copyBtn').onclick=async()=>{
-  const txt=document.getElementById('preview').textContent;
-  try{ await navigator.clipboard.writeText(txt); }
-  catch(e){ const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove(); }
-  const toast=document.getElementById('toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);
-};
+function legacyCopy(txt){ const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove(); }
+function copyText(txt){
+  const done=()=>{ const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800); };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,()=>{ legacyCopy(txt); done(); }); }
+  else { legacyCopy(txt); done(); }
+}
+document.getElementById('copyBtn').onclick=()=>copyText(document.getElementById('preview').textContent);
+document.querySelectorAll('.iter-copy').forEach(b=>{ b.onclick=()=>copyText(document.getElementById(b.dataset.copy).textContent); });
 
 /* dev-modus: alleen actief met ?test in de URL. Vult per stap de open velden
    met geloofwaardige, fictieve testgegevens zodat je snel kunt doorklikken. */
