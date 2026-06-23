@@ -81,30 +81,22 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
   padding:10px 14px;font-weight:700;cursor:pointer;width:100%;font-family:var(--font-sans);font-size:.92rem;min-height:44px;}
 .addbtn:hover{border-color:var(--color-brand);background:var(--teal-50);}
 
-/* style picker */
-.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 2px;}
-.style-card{cursor:pointer;border:2px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;
-  padding:10px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;
-  transition:border-color .15s,box-shadow .15s;}
-.style-card:hover{border-color:var(--color-brand);}
-.style-card.on{border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
-.style-card svg{width:100%;height:auto;display:block;}
-.style-card .style-name{font-size:.85rem;font-weight:700;color:var(--text-strong);}
-.style-card .style-check{font-size:.78rem;font-weight:600;color:var(--text-muted);}
-.style-card.on .style-check{color:var(--teal-700);}
-
-/* color picker */
-.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 2px;}
-.color-card{cursor:pointer;border:2px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;
-  padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;
-  transition:border-color .15s,box-shadow .15s;min-height:44px;}
-.color-card:hover{border-color:var(--color-brand);}
-.color-card.on{border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
-.color-card .swatches{display:flex;gap:6px;}
-.color-card .swatches span{width:24px;height:24px;border-radius:50%;border:1px solid rgba(15,23,42,.08);}
-.color-card .color-name{font-size:.85rem;font-weight:700;color:var(--text-strong);}
-.color-card .color-check{font-size:.78rem;font-weight:600;color:var(--text-muted);}
-.color-card.on .color-check{color:var(--teal-700);}
+/* template picker */
+.tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0 2px;}
+.tpl-card{border:2px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s;}
+.tpl-card.on{border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
+.tpl-preview{position:relative;cursor:pointer;background:var(--slate-100);line-height:0;}
+.tpl-preview img{width:100%;height:auto;display:block;}
+.tpl-card .tpl-name{font-size:.92rem;font-weight:700;color:var(--text-strong);padding:10px 12px 2px;}
+.tpl-card .tpl-chosen{font-size:.76rem;font-weight:700;color:var(--teal-700);padding:0 12px;min-height:16px;}
+.tpl-swatches{display:flex;flex-wrap:wrap;gap:8px;padding:8px 12px 12px;}
+.tpl-swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid #fff;
+  box-shadow:0 0 0 1.5px var(--slate-300);transition:box-shadow .12s,transform .1s;position:relative;}
+.tpl-swatch:hover{transform:scale(1.08);}
+.tpl-swatch.on{box-shadow:0 0 0 2.5px var(--teal-700);}
+.tpl-swatch.on::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:.8rem;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.45);}
 
 /* nav */
 .nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--slate-200);}
@@ -276,18 +268,13 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <p class="skip-hint">Klaar, of geen zin meer? Klik op volgende, daarna kies je nog hoe je cv eruitziet.</p>
     </div>
 
-    <!-- STEP 7: stijlkeuze -->
+    <!-- STEP 7: template- en kleurkeuze -->
     <div class="step" data-step="6" data-block="req">
-      <span class="block-tag block-tag--req">Laatste stap · Stijl en kleur</span>
+      <span class="block-tag block-tag--req">Laatste stap · Kies je opmaak</span>
       <h2 class="q-title">Hoe wil je dat je cv eruitziet?</h2>
-      <p class="q-hint">Kies eerst een stijl. Je ziet hieronder een voorbeeld van de opmaak.</p>
-      <div class="style-grid" id="styleGrid"></div>
-      <p class="chip-note">Je kiest er één. Twijfel je? Kies gewoon de stijl die je het mooist vindt, je jobcoach helpt je later verder.</p>
-
-      <h2 class="q-title" style="margin-top:26px;">En welk kleurenschema?</h2>
-      <p class="q-hint">Kies daarna de kleuren die in je cv gebruikt worden.</p>
-      <div class="color-grid" id="colorGrid"></div>
-      <p class="chip-note">Ook hier kies je er één.</p>
+      <p class="q-hint">Kies een ontwerp dat je mooi vindt. Tik daarna onder dat ontwerp op een kleur, dan zie je het voorbeeld in die kleur.</p>
+      <div class="tpl-grid" id="tplGrid"></div>
+      <p class="chip-note">Je kiest één ontwerp met één kleur. Twijfel je? Kies gewoon wat je het mooist vindt, je jobcoach helpt je later verder.</p>
     </div>
 
     <!-- RESULT -->
@@ -299,7 +286,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       </div>
       <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
       <div class="copybox" id="preview"></div>
-      <p class="testnote"><b>Let op (testversie):</b> de instructie voor de chatbot (de masterprompt) zit nu in dit blok verwerkt, inclusief de stijl die je koos. De voorbeeldstijlen zijn nog tijdelijk (zes kleuren van dezelfde klassieke opmaak); de echte stijlen volgen later.</p>
+      <p class="testnote"><b>Let op (testversie):</b> de instructie voor de chatbot (de masterprompt) zit in dit blok verwerkt, inclusief het template en de kleur die je koos. De chatbot maakt er een Word-document (.docx) van dat je zelf kunt aanpassen.</p>
     </div>
 
     <div class="nav">
@@ -312,6 +299,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 <div class="copied-toast" id="toast">Gekopieerd naar klembord</div>
 
 <script src="masterprompt.js"></script>
+<script src="templates.js"></script>
 <script>
 const steps = Array.from(document.querySelectorAll('.step'));
 const totalInput = 7; // 0..6 are input steps, 7 is result
@@ -370,112 +358,46 @@ function addExp(){
 document.getElementById('addExp').onclick=addExp;
 addExp();
 
-/* style picker
-   Voorlopig: zes keer dezelfde klassieke cv-stijl in een andere accentkleur,
-   zodat de keuzestap tastbaar is. De echte, uiteenlopende stijlen volgen later;
-   vervang dan de inhoud van STYLES (kleur, naam en omschrijving per stijl). */
-const STYLES = [
-  {id:'klassiek-antraciet', naam:'Klassiek Antraciet', accent:'#2b2f36'},
-  {id:'klassiek-diepblauw', naam:'Klassiek Diepblauw', accent:'#1f3a5f'},
-  {id:'klassiek-bordeaux',  naam:'Klassiek Bordeaux',  accent:'#7a2630'},
-  {id:'klassiek-bosgroen',  naam:'Klassiek Bosgroen',  accent:'#1f5132'},
-  {id:'klassiek-teal',      naam:'Klassiek Teal',      accent:'#017371'},
-  {id:'klassiek-warmbruin', naam:'Klassiek Warmbruin', accent:'#6b4423'}
-];
-let selectedStyle = null;
+/* template picker — data + previews komen uit templates.js (TEMPLATES).
+   De deelnemer kiest één template met één kleurvariant. Een kleur kiezen
+   binnen een template wisselt de voorbeeldafbeelding van dat template. */
+let selected = null;  // {tpl, color}
+function tplDefaultColor(t){ return (t.kleuren.find(k=>k.id==='blue')||t.kleuren[0]).id; }
+function tplActiveColor(t){ return (selected && selected.tpl===t.id) ? selected.color : tplDefaultColor(t); }
 
-/* Mini-voorbeeld van een klassiek cv in de gekozen accentkleur. */
-function stylePreviewSVG(accent){
-  return `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-    <rect x="0" y="0" width="120" height="160" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
-    <rect x="10" y="12" width="62" height="9" rx="1.5" fill="${accent}"/>
-    <rect x="10" y="25" width="44" height="4" rx="1" fill="#cbd5e1"/>
-    <rect x="92" y="10" width="20" height="20" fill="#ffffff" stroke="${accent}" stroke-width="1.5"/>
-    <rect x="10" y="37" width="100" height="2" fill="${accent}"/>
-    <rect x="10" y="47" width="30" height="5" rx="1" fill="${accent}"/>
-    <rect x="10" y="56" width="96" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="62" width="90" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="68" width="84" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="82" width="34" height="5" rx="1" fill="${accent}"/>
-    <rect x="10" y="91" width="96" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="97" width="92" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="103" width="70" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="117" width="28" height="5" rx="1" fill="${accent}"/>
-    <rect x="10" y="126" width="96" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="132" width="88" height="3" rx="1" fill="#e2e8f0"/>
-    <rect x="10" y="138" width="60" height="3" rx="1" fill="#e2e8f0"/>
-  </svg>`;
-}
-
-/* Beschrijving van de gekozen stijl (de opmaak/indeling). De kleur komt
-   apart uit het gekozen kleurenschema; deze tekst is dus kleur-neutraal.
-   Nu nog een voorlopige tekst; vervang per definitieve stijl. */
-function styleDescription(st){
-  return `(Dit is nog een voorlopige stijl; de definitieve stijlen volgen later.) Bouw het cv in een klassieke, verzorgde opmaak:
-- Sober en zakelijk, met een rustige, goed leesbare indeling.
-- Lettertype: een schreef-lettertype (zoals Georgia of Times New Roman) voor de naam en koppen, en een schreefloos lettertype (zoals Arial of Calibri) voor de lopende tekst.
-- Foto rechtsboven, vierkant bijgesneden (als de kandidaat een foto meestuurt).
-- Gebruik het gekozen kleurenschema (zie hieronder) terughoudend voor de accenten; houd de lopende tekst in zwart of donkergrijs.
-- Zorg dat het cv er ook netjes uitziet wanneer het in zwart-wit wordt afgedrukt.`;
-}
-
-function renderStyles(){
-  const grid=document.getElementById('styleGrid');
+function renderTemplates(){
+  const grid=document.getElementById('tplGrid');
   grid.innerHTML='';
-  STYLES.forEach(st=>{
+  TEMPLATES.forEach(t=>{
+    const activeColor=tplActiveColor(t);
+    const col=t.kleuren.find(k=>k.id===activeColor)||t.kleuren[0];
+    const chosen=selected && selected.tpl===t.id;
     const card=document.createElement('div');
-    card.className='style-card'+(selectedStyle===st.id?' on':'');
-    card.innerHTML=stylePreviewSVG(st.accent)
-      +`<span class="style-name">${st.naam}</span>`
-      +`<span class="style-check">${selectedStyle===st.id?'Gekozen ✓':'Kies deze'}</span>`;
-    card.onclick=()=>{ selectedStyle=st.id; renderStyles(); };
+    card.className='tpl-card'+(chosen?' on':'');
+    const sw=t.kleuren.map(k=>`<span class="tpl-swatch${chosen&&selected.color===k.id?' on':''}" data-c="${k.id}" title="${k.naam}" style="background:${k.hex}"></span>`).join('');
+    card.innerHTML=
+      `<div class="tpl-preview"><img src="${col.img}" alt="Voorbeeld ${t.naam}, kleur ${col.naam}" loading="lazy"></div>`
+      +`<div class="tpl-name">${t.naam}</div>`
+      +`<div class="tpl-chosen">${chosen?'Gekozen: '+col.naam:''}</div>`
+      +`<div class="tpl-swatches">${sw}</div>`;
+    card.querySelector('.tpl-preview').onclick=()=>{ selected={tpl:t.id,color:activeColor}; renderTemplates(); };
+    card.querySelectorAll('.tpl-swatch').forEach(s=>{
+      s.onclick=(e)=>{ e.stopPropagation(); selected={tpl:t.id,color:s.dataset.c}; renderTemplates(); };
+    });
     grid.appendChild(card);
   });
 }
-renderStyles();
+renderTemplates();
 
-/* color picker
-   De deelnemer kiest na de stijl een kleurenschema. Pas de kleuren of namen
-   hier aan als de definitieve schema's bekend zijn. */
-const COLOR_SCHEMES = [
-  {id:'care-teal',   naam:'Care Teal',          hoofd:'teal',              accent:'zacht groenblauw', kleuren:['#017371','#018a89','#d6efee']},
-  {id:'diepblauw',   naam:'Diepblauw',          hoofd:'diepblauw',         accent:'lichtblauw',       kleuren:['#1f3a5f','#2f5a8f','#dce7f3']},
-  {id:'bordeaux',    naam:'Warm bordeaux',      hoofd:'bordeauxrood',      accent:'zacht roze',       kleuren:['#7a2630','#a8434f','#f3dce0']},
-  {id:'bosgroen',    naam:'Bosgroen',           hoofd:'bosgroen',          accent:'zacht groen',      kleuren:['#1f5132','#357a4f','#dcefe3']},
-  {id:'klassiek-zw', naam:'Zwart-wit klassiek', hoofd:'antraciet/zwart',   accent:'grijs',            kleuren:['#1e293b','#475569','#e2e8f0']},
-  {id:'warm-zand',   naam:'Warm zand',          hoofd:'warmbruin',         accent:'zandkleur',        kleuren:['#6b4423','#a06a3a','#f0e6d8']}
-];
-let selectedColor = null;
-
-function renderColors(){
-  const grid=document.getElementById('colorGrid');
-  grid.innerHTML='';
-  COLOR_SCHEMES.forEach(cs=>{
-    const card=document.createElement('div');
-    card.className='color-card'+(selectedColor===cs.id?' on':'');
-    const sw=cs.kleuren.map(k=>`<span style="background:${k}"></span>`).join('');
-    card.innerHTML=`<div class="swatches">${sw}</div>`
-      +`<span class="color-name">${cs.naam}</span>`
-      +`<span class="color-check">${selectedColor===cs.id?'Gekozen ✓':'Kies deze'}</span>`;
-    card.onclick=()=>{ selectedColor=cs.id; renderColors(); };
-    grid.appendChild(card);
-  });
-}
-renderColors();
-
-/* Combineert de gekozen stijl en het gekozen kleurenschema tot één instructie
-   die onder de deelnemer-input in de te kopieren prompt komt. */
+/* Beschrijving van het gekozen template + kleur, voor onder de deelnemer-input. */
 function opmaakBlok(){
-  const st=STYLES.find(s=>s.id===selectedStyle);
-  const cs=COLOR_SCHEMES.find(c=>c.id===selectedColor);
-  if(!st && !cs) return '';
+  if(!selected) return '';
+  const t=TEMPLATES.find(x=>x.id===selected.tpl); if(!t) return '';
+  const col=t.kleuren.find(k=>k.id===selected.color)||t.kleuren[0];
   let out=`\n-- Door de deelnemer gekozen opmaak --\n`;
-  out+= st
-    ? `Gekozen stijl: ${st.naam}.\n${styleDescription(st)}\n`
-    : `Gekozen stijl: geen. Kies zelf een passende, klassieke stijl.\n`;
-  out+= cs
-    ? `\nGekozen kleurenschema: ${cs.naam} (hoofdkleur ${cs.hoofd}, accent ${cs.accent}; kleurcodes ${cs.kleuren.join(', ')}).\nGebruik deze kleuren voor de accenten van het cv: de naam bovenaan, de koppen en de scheidingslijnen. Houd de lopende tekst donker en goed leesbaar.\n`
-    : `\nGekozen kleurenschema: geen. Kies zelf een rustig, professioneel kleurenschema.\n`;
+  out+=`Gekozen template: ${t.naam}.\n${t.omschrijving}\n`;
+  out+=`\nGekozen kleurvariant: ${col.naam} (accentkleur ${col.hex}).\n`
+     +`Gebruik deze accentkleur consequent voor alle accenten van dit template: koppen, balken of zijbalk, lijnen, icoontjes en accentvlakken. Houd de lopende tekst donker en goed leesbaar.\n`;
   return out;
 }
 
@@ -511,16 +433,9 @@ function gather(){
 }
 function line(label,val){ if(!val|| (Array.isArray(val)&&!val.length))return ''; return `${label}: ${Array.isArray(val)?val.join(', '):val}\n`; }
 
-/* Fallback voor [STIJL_PLACEHOLDER] als de kandidaat geen stijl heeft gekozen. */
-const STIJL_FALLBACK = 'De kandidaat heeft geen stijl gekozen. Kies zelf een passende, klassieke stijl, of vraag de kandidaat kort naar een voorkeur.';
-
 function buildPreview(){
   const d=gather();
-  const stijl=(selectedStyle||selectedColor)
-    ? 'De kandidaat heeft zelf een stijl en een kleurenschema gekozen. Die keuze staat onderaan, bij de gegevens van de kandidaat, onder het kopje "Door de deelnemer gekozen opmaak". Houd die keuze aan voor de opmaak en de kleuren.'
-    : STIJL_FALLBACK;
-  const prompt=MASTERPROMPT.replace('[STIJL_PLACEHOLDER]', stijl);
-  let t=prompt+`\n\n---\n\n### GEGEVENS VAN DE KANDIDAAT ###\n\n`;
+  let t=MASTERPROMPT+`\n\n---\n\n### GEGEVENS VAN DE KANDIDAAT ###\n\n`;
   t+=`-- Contact --\n`;
   t+=line('Naam',d.naam)+line('Telefoon',d.tel)+line('Woonplaats',d.plaats)+line('E-mail',d.mail)+line('Geboortedatum',d.dob);
   t+=`\n-- Werk en ervaring --\n`+(d.exp.length?d.exp.join('\n')+'\n':'(niet ingevuld)\n');

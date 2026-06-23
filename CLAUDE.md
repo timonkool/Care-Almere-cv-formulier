@@ -33,6 +33,8 @@ Houd dit minimaal. Maak geen nieuwe mappen of bestanden aan zonder expliciete go
 /
 ├── index.html          # Het volledige formulier: opmaak (inline CSS) + logica (inline JS)
 ├── masterprompt.js     # De masterprompt als losse constante (zie sectie 4)
+├── templates.js        # De zes cv-templates + kleurvarianten + beschrijvingen (stap 7)
+├── templates/previews/ # Preview-afbeeldingen per template/kleur (.webp), gerenderd uit de Word-templates
 ├── CLAUDE.md           # Dit document
 └── README.md           # Korte uitleg van de repo
 ```
