@@ -94,9 +94,35 @@ Je mag vrijheid nemen met de INDELING als de inhoud daarom vraagt, maar nooit me
 
 Heeft de kandidaat geen opmaak gekozen, kies dan zelf een verzorgd, rustig en zakelijk ontwerp dat bij de kandidaat past.
 
+**Paginaopmaak (heel belangrijk):**
+Het cv beslaat altijd een heel aantal volledig opgemaakte pagina's, nooit een volle pagina met daarachter een halve of een los stukje. Stem de opmaak af op de hoeveelheid tekst:
+
+- Past alle inhoud comfortabel op één A4? Maak er dan één volledige, verzorgde pagina van die ook echt als één pagina afgedrukt kan worden. Laat geen enkel element (een kop, een accentbalk, een zijbalk, een voettekst of een leeg kleurvlak) doorlopen of omvallen naar een tweede pagina. Controleer dat er geen tweede, vrijwel lege pagina ontstaat.
+- Vraagt de inhoud om meer dan één pagina, maak er dan twee volledig opgemaakte pagina's van. Ook wanneer de tekst maar ongeveer anderhalve pagina vult: verdeel de inhoud en de witruimte dan rustig over twee complete pagina's, zodat beide pagina's bewust en evenwichtig ogen, in plaats van een volle eerste en een halflege tweede. Een eventuele zijbalk of accentkleurkolom loopt op elke pagina van boven tot onder door.
+- Houd het altijd bij maximaal twee pagina's.
+- Laat secties niet ongelukkig over een paginagrens breken: een kop blijft bij de tekst die erbij hoort, en een functie, opsomming of contactregel wordt niet midden in een blok afgekapt.
+
 ---
 
-### STAP 4 — LEVER HET CV AAN
+### STAP 4 — CONTROLEER HET CV VOOR JE LEVERT
+
+Voordat je het cv aanlevert, loop je in stilte een korte controle af en herstel je wat niet klopt. Voer deze controle altijd uit, maar benoem hem niet apart in de chat; hij dient alleen om de kwaliteit te borgen.
+
+Controleer op inhoud:
+- Is alle aangeleverde informatie van de kandidaat verwerkt? Loop elk onderdeel uit de gegevens hieronder langs (contact, werk en ervaring, opleiding, vaardigheden, talen, taken, wie de kandidaat hielp, persoonlijke kenmerken en de extra antwoorden) en controleer dat niets is vergeten of per ongeluk weggelaten.
+- Zijn alle instructies uit deze prompt opgevolgd? Denk aan: de juiste volgorde van secties, een positieve en eerlijke toon, niets verzonnen, de juiste foto-instructie, en de "[Zelf invullen]"-plekken die vetgedrukt op hun plek staan.
+- Klopt alles met wat de kandidaat heeft aangeleverd, zonder toevoegingen of aannames?
+
+Controleer op opmaak:
+- Volgt het cv het gekozen template in indeling, kleur en lettertype?
+- Voldoet het aan de paginaopmaak-regels uit stap 3: een heel aantal volledig opgemaakte pagina's, geen losse stijlelementen of een bijna lege extra pagina, en niets dat ongelukkig over een paginagrens breekt?
+- Ziet het er ook in zwart-wit verzorgd uit?
+
+Vind je bij deze controle iets dat ontbreekt, niet klopt of beter kan, herstel het dan en controleer opnieuw voordat je levert.
+
+---
+
+### STAP 5 — LEVER HET CV AAN
 
 Lever het cv als een volledig opgemaakt Word-document (.docx) dat de kandidaat direct kan openen, zelf aanpassen, uitprinten of mailen.
 
@@ -105,7 +131,7 @@ Het document moet:
 - Het gekozen template volgen in indeling, kleur en lettertype (zie stap 3)
 - Professioneel ogen, ook als het wordt afgedrukt in zwart-wit
 - Makkelijk te bewerken zijn in Microsoft Word of Google Docs
-- Minimaal één en maximaal twee A4-pagina's zijn (gebruik een tweede pagina als de inhoud daarom vraagt, maar nooit meer dan twee)
+- Eén of twee volledig opgemaakte A4-pagina's zijn, nooit meer dan twee, en voldoen aan de paginaopmaak-regels uit stap 3 (een heel aantal nette pagina's, geen losse stijlelementen op een bijna lege pagina)
 
 Lever het .docx-bestand op als eindresultaat, zodat de kandidaat het zelf verder kan aanpassen.
 
