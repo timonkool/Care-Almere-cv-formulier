@@ -184,11 +184,13 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .photo-tip .pt-text{font-size:.92rem;color:var(--slate-700);}
 .photo-tip .pt-text b{color:var(--teal-800);}
 
-/* twee kolommen op de resultaatpagina: links cv, rechts motivatiebrief */
-.result-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:8px 0 2px;align-items:start;}
-.result-col{display:flex;flex-direction:column;}
-.rc-title{font-size:1.02rem;font-weight:700;color:var(--text-strong);margin:0 0 4px;}
-.rc-sub{font-size:.85rem;color:var(--text-muted);margin:0 0 10px;}
+/* twee kolommen op de resultaatpagina: links cv, rechts motivatiebrief.
+   subgrid lijnt titel, ondertitel, knop en promptblok per rij uit, ook als
+   de ene ondertitel een regel langer is dan de andere. */
+.result-cols{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto auto;gap:18px;margin:8px 0 2px;align-items:start;}
+.result-col{display:grid;grid-template-rows:subgrid;grid-row:span 4;align-content:start;}
+.rc-title{font-size:1.02rem;font-weight:700;color:var(--text-strong);margin:0;}
+.rc-sub{font-size:.85rem;color:var(--text-muted);margin:4px 0 10px;}
 .result-col .copybox{margin:12px 0 0;}
 
 /* iteratie-tips met kopieerbare prompts op de resultaatpagina */
@@ -208,7 +210,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .read-first b{font-weight:800;}
 
 @media (max-width:520px){.row2{grid-template-columns:1fr;} .hd{padding:24px 18px;} .body{padding:8px 18px 28px;} .progress{padding:12px 18px;}
-  .result-cols{grid-template-columns:1fr;} .nav-right{width:100%;} .nav-right .btn{flex:1 1 auto;}}
+  .result-cols{grid-template-columns:1fr;grid-template-rows:none;} .result-col{display:flex;flex-direction:column;grid-row:auto;} .nav-right{width:100%;} .nav-right .btn{flex:1 1 auto;}}
 </style>
 </head>
 <body>
