@@ -97,7 +97,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
   display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s;}
 .tpl-card.on{border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
 .tpl-preview{position:relative;cursor:pointer;background:#fff;line-height:0;aspect-ratio:210/297;overflow:hidden;border-bottom:1px solid var(--slate-200);}
-/* live preview: het echte A4-template (794px breed) verkleind tot de kaartbreedte */
+/* preview-afbeelding: het echte Word-resultaat van het ontwerp, bovenaan uitgelijnd */
 .tpl-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:block;}
 .tpl-card .tpl-name{font-size:.92rem;font-weight:700;color:var(--text-strong);padding:10px 12px 2px;}
 .tpl-card .tpl-chosen{font-size:.76rem;font-weight:700;color:var(--teal-700);padding:0 12px;min-height:16px;}
@@ -380,7 +380,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <p class="skip-hint">Klaar, of geen zin meer? Klik op volgende, daarna kies je nog hoe je cv eruitziet.</p>
     </div>
 
-    <!-- STEP 8: template- en kleurkeuze -->
+    <!-- STEP 8: keuze ontwerp en kleur -->
     <div class="step" data-step="7" data-block="req">
       <span class="block-tag block-tag--req">Laatste stap · Kies je opmaak</span>
       <h2 class="q-title">Hoe wil je dat je cv eruitziet?</h2>
@@ -420,11 +420,11 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
           </div>
           <p class="bot-note">Eerste keer? Soms moet je eenmalig een gratis account aanmaken met je e-mail.</p>
         </li>
-        <li>
+        <li id="fotoStap">
           <p class="s-head">3. Voeg eerst een foto toe</p>
           <div class="photo-tip">
             <span class="pt-ico" aria-hidden="true">📸</span>
-            <span class="pt-text"><b>Sterk aangeraden:</b> voeg een foto van jezelf toe voordat je de tekst verstuurt. Klik op het plusje of het paperclip-icoon in de chatbot en kies een rustige, vriendelijke foto. Zo staat je foto meteen goed op je cv. Heb je geen foto? Dan werkt het ook prima zonder.</span>
+            <span class="pt-text" id="fotoTekst"><b>Sterk aangeraden:</b> voeg een foto van jezelf toe voordat je de tekst verstuurt. Klik op het plusje of het paperclip-icoon in de chatbot en kies een rustige, vriendelijke foto. Zo staat je foto meteen goed op je cv. Heb je geen foto? Dan werkt het ook prima zonder.</span>
           </div>
         </li>
         <li>
@@ -453,13 +453,13 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 
           <div class="iter">
             <p class="iter-head">3. Laat een sollicitatiecoach je cv herschrijven</p>
-            <div class="iter-prompt" id="ip3">Wil je nu als sollicitatiecoach mijn cv herschrijven? Gebruik de feedback van de recruiter en mijn antwoorden op je vragen om mijn cv sterker en duidelijker te maken. Houd dezelfde stijl en opmaak aan en lever het weer als Word-document (.docx).</div>
+            <div class="iter-prompt" id="ip3">Wil je nu als sollicitatiecoach mijn cv herschrijven? Gebruik de feedback van de recruiter en mijn antwoorden op je vragen om mijn cv sterker en duidelijker te maken. Maak het Word-document daarna opnieuw met dezelfde bouwcode als eerder in dit gesprek, met hetzelfde ontwerp en dezelfde kleur, zonder iets aan de code te veranderen.</div>
             <button class="iter-copy" type="button" data-copy="ip3">Kopieer deze tekst</button>
           </div>
 
           <div class="iter">
-            <p class="iter-head">4. Laat een vormgever de opmaak perfectioneren</p>
-            <div class="iter-prompt" id="ip4">Wil je nu als vormgever de opmaak van mijn cv nalopen en perfectioneren? Let op een nette indeling, rechte uitlijning, rustige witruimte, en dat alles netjes op hele pagina's past zonder losse stukjes op een bijna lege pagina. Houd de gekozen stijl en kleur aan en lever het weer als Word-document (.docx).</div>
+            <p class="iter-head">4. Laat een eindredacteur je cv nalopen</p>
+            <div class="iter-prompt" id="ip4">Wil je nu als eindredacteur mijn cv nalopen? Controleer de spelling en of alle zinnen kort, duidelijk en in dezelfde stijl geschreven zijn. Past het cv niet netjes op één pagina, maak de tekst dan korter. Maak het Word-document daarna opnieuw met dezelfde bouwcode als eerder in dit gesprek, met hetzelfde ontwerp en dezelfde kleur, zonder iets aan de code te veranderen.</div>
             <button class="iter-copy" type="button" data-copy="ip4">Kopieer deze tekst</button>
           </div>
         </li>
@@ -482,7 +482,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         </div>
       </div>
 
-      <p class="infonote" style="margin-top:18px;"><b>Let op:</b> in elke tekst zit de instructie voor de chatbot (de masterprompt) al verwerkt, inclusief het template en de kleur die je koos. De motivatiebrief wordt bewust een basisbrief: een paar plekken vul je later samen met je jobcoach in voor een echte vacature. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
+      <p class="infonote" style="margin-top:18px;"><b>Let op:</b> in elke tekst zit de instructie voor de chatbot (de masterprompt) al verwerkt, inclusief het ontwerp en de kleur die je koos. De motivatiebrief wordt bewust een basisbrief: een paar plekken vul je later samen met je jobcoach in voor een echte vacature. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
     </div>
 
     <p class="val-msg" id="valMsg" role="alert" aria-live="assertive"></p>
@@ -505,7 +505,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 <script>
 const steps = Array.from(document.querySelectorAll('.step'));
 const totalInput = 8; // 0..7 are input steps, 8 is result
-const lastInput = totalInput-1; // 7 = laatste invulstap (template)
+const lastInput = totalInput-1; // 7 = laatste invulstap (ontwerp en kleur)
 let cur = 0;
 const fill = document.getElementById('fill');
 const bar = document.getElementById('bar');
@@ -741,9 +741,18 @@ function opmaakBlok(){
     fence+`python`, CV_BOUWCODE, ``, CV_GEGEVENS, ``, aanroep, fence, ``
   ].join(`\n`);
 }
+/* Stap 3 op de resultaatpagina: de fototip alleen bij een ontwerp met fotoplek. */
+const FOTO_TEKST_MET = document.getElementById('fotoTekst').innerHTML;
+function fotoStapBijwerken(){
+  const s=selectedTpl(), li=document.getElementById('fotoStap');
+  const met=!s || s.t.foto;
+  li.querySelector('.s-head').textContent = met ? '3. Voeg eerst een foto toe' : '3. Een foto is niet nodig';
+  document.getElementById('fotoTekst').innerHTML = met ? FOTO_TEKST_MET
+    : `Je koos het ontwerp "${s.t.naam}". Dat heeft geen foto, dus je hoeft geen foto toe te voegen. Ga gewoon door naar stap 4.`;
+}
 function opmaakKort(){
   const s=selectedTpl(); if(!s) return '';
-  return `\n-- Door de deelnemer gekozen cv-opmaak --\nTemplate: ${s.t.naam}, kleur ${s.col.naam} (accentkleur ${s.col.hex}).\n`;
+  return `\n-- Door de deelnemer gekozen cv-opmaak --\nOntwerp: ${s.t.naam}, kleur ${s.col.naam} (accentkleur ${s.col.hex}).\n`;
 }
 
 /* gather + preview */
@@ -814,6 +823,7 @@ function buildPreview(){
   const cv=(MASTERPROMPT+`\n\n---\n\n`+data+opmaakBlok()).trim();
   const brief=(MASTERPROMPT_MOTIVATIEBRIEF+`\n\n---\n\n`+data+opmaakKort()).trim();
   document.getElementById('previewCV').textContent=cv;
+  fotoStapBijwerken();
   document.getElementById('previewBrief').textContent=brief;
 }
 

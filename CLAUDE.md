@@ -34,13 +34,16 @@ Houd dit minimaal. Maak geen nieuwe mappen of bestanden aan zonder expliciete go
 ├── index.html          # Het volledige formulier: opmaak (inline CSS) + logica (inline JS)
 ├── masterprompt.js     # De cv-masterprompt als losse constante (zie sectie 4)
 ├── masterprompt-motivatiebrief.js # De motivatiebrief-masterprompt als losse constante (zie sectie 4)
-├── templates.js        # De twee cv-ontwerpen (Klassiek, Modern) + 6 kleuren, en de vaste Python-bouwcode (CV_BOUWCODE) die mee gaat in de cv-prompt. De chatbot vult alleen de gegevens in en voert de code uit, zodat het Word-bestand altijd hetzelfde (en foutloos voor Word) uitkomt
-├── templates/previews/ # klassiek-*.webp en modern-*.webp: gerenderd uit het echte Word-resultaat van CV_BOUWCODE (opnieuw maken na een wijziging in de code). De overige .webp zijn oude previews, alleen referentie
+├── templates.js        # De twee cv-ontwerpen (Klassiek, Modern) + 6 kleuren, en de vaste Python-bouwcode (CV_BOUWCODE) die mee gaat in de cv-prompt. Niet met de hand aanpassen: gegenereerd uit tools/cv_bouwcode.py
+├── templates/previews/ # Voorbeeldafbeeldingen per ontwerp/kleur, gerenderd uit het echte Word-resultaat van de bouwcode
+├── tools/              # Onderhoud van de ontwerpen (niet nodig voor de website): cv_bouwcode.py (bron), bouw_templates.py (synchroniseert templates.js en maakt de previews opnieuw), check_word.py, voorbeeldgegevens.py
 ├── CLAUDE.md           # Dit document
 └── README.md           # Korte uitleg van de repo
 ```
 
 Het formulier is bewust één bestand. Splits `index.html` niet op in losse CSS/JS-bestanden zonder dat eerst voor te leggen; de eenvoud van één bestand is hier een feature, niet een tekortkoming.
+
+De cv-opmaak werkt zo: de chatbot ontwerpt zelf niets, maar voert de vaste bouwcode uit `templates.js` uit en vult alleen de inhoud in. Wil je een ontwerp of kleur aanpassen, wijzig dan `tools/cv_bouwcode.py` of de kleuren in `templates.js` en draai `python tools/bouw_templates.py` (zie README). Maak het ontwerp niet afhankelijk van tekstbeschrijvingen of HTML: dat bleek in de praktijk niet betrouwbaar in Word.
 
 De enige bewuste uitzondering zijn de masterprompts, die in aparte bestanden staan (`masterprompt.js` voor het cv en `masterprompt-motivatiebrief.js` voor de motivatiebrief), omdat die los van het formulier vaak veranderen. Bij afronden bouwt `index.html` één gedeeld gegevensblok van de kandidaat en plakt dat achter elke masterprompt; zo ontstaan twee te kopiëren teksten (cv en motivatiebrief). Zie sectie 4.
 
@@ -158,5 +161,5 @@ Het formulier volgt de huisstijl van Stichting Care Almere (niet Timons persoonl
 
 \---
 
-*Laatste update: juni 2026*
+*Laatste update: november 2026*
 

@@ -13,13 +13,12 @@
   gemaakt met precies deze code: het echte .docx met voorbeeldgegevens,
   via LibreOffice omgezet naar een afbeelding. Wat je ziet is wat je krijgt.
 
-  LET OP: verander je CV_BOUWCODE of een kleur, maak de previews dan opnieuw
-  (generator en testdata staan buiten de repo in ../_word-test_2026-11-15/).
-  In CV_BOUWCODE mogen geen backticks, backslashes of dollar-accolade staan,
+  Wijzigen: de bron van de bouwcode is tools/cv_bouwcode.py. Pas die aan
+  (of een kleur hieronder) en draai daarna  python tools/bouw_templates.py.
+  Dat zet de code hieronder in CV_BOUWCODE, maakt alle previews opnieuw en
+  controleert ze. Pas CV_BOUWCODE hier dus niet met de hand aan.
+  In de bouwcode mogen geen backticks, backslashes of dollar-accolade staan,
   want het is een JavaScript-templatestring (een tab is daarom chr(9)).
-
-  De oude ontwerpen en hun previews (stylish-modern-*, westminster-*, enz.)
-  worden niet meer gebruikt; ze staan er nog als referentie.
 */
 
 const TPL_KLEUREN = [
