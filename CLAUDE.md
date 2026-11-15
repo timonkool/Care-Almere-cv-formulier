@@ -158,6 +158,7 @@ Het formulier volgt de huisstijl van Stichting Care Almere (niet Timons persoonl
 * Hex-kleuren hardcoden in plaats van de CSS-variabelen gebruiken.
 * `index.html` opsplitsen of een framework introduceren omdat het "netter" zou zijn. De eenvoud is bewust.
 * Vergeten dat een commit naar `main` meteen live staat.
+* Na een wijziging in `templates.js` of een masterprompt het versienummer (`?v=...`) achter die scripts in `index.html` niet verhogen. Browsers bewaren de scripts tot 10 minuten; een nieuwe pagina met een oud script loopt vast.
 
 \---
 

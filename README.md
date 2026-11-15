@@ -55,4 +55,6 @@ Nodig voor stap 2 (alleen op de computer van wie onderhoudt): Python 3 met `pip 
 
 ## Publiceren
 
-De repository is gekoppeld aan timonkool.nl. Een push naar `main` staat direct live; er is geen aparte testomgeving. Test daarom eerst lokaal door `index.html` te openen (met `?test` achter de URL verschijnt per stap een knop die fictieve testgegevens invult).
+De repository is gekoppeld aan timonkool.nl. Een push naar `main` staat na ongeveer een minuut live; er is geen aparte testomgeving.
+
+Heb je `templates.js`, `masterprompt.js` of `masterprompt-motivatiebrief.js` gewijzigd? Verhoog dan in `index.html` het versienummer achter die scripts (`?v=2026-11-15` wordt bijvoorbeeld `?v=2026-12-01`). Browsers bewaren de scripts anders tot 10 minuten, en een nieuwe pagina met een oud script kan vastlopen. Test daarom eerst lokaal door `index.html` te openen (met `?test` achter de URL verschijnt per stap een knop die fictieve testgegevens invult).
