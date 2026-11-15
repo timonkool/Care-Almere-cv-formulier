@@ -34,8 +34,8 @@ Houd dit minimaal. Maak geen nieuwe mappen of bestanden aan zonder expliciete go
 ├── index.html          # Het volledige formulier: opmaak (inline CSS) + logica (inline JS)
 ├── masterprompt.js     # De cv-masterprompt als losse constante (zie sectie 4)
 ├── masterprompt-motivatiebrief.js # De motivatiebrief-masterprompt als losse constante (zie sectie 4)
-├── templates.js        # De zes cv-templates + kleurvarianten + beschrijvingen (laatste stap)
-├── templates/previews/ # Preview-afbeeldingen per template/kleur (.webp), gerenderd uit de Word-templates
+├── templates.js        # De twee cv-ontwerpen (Klassiek, Modern) + 6 kleuren, en de vaste Python-bouwcode (CV_BOUWCODE) die mee gaat in de cv-prompt. De chatbot vult alleen de gegevens in en voert de code uit, zodat het Word-bestand altijd hetzelfde (en foutloos voor Word) uitkomt
+├── templates/previews/ # klassiek-*.webp en modern-*.webp: gerenderd uit het echte Word-resultaat van CV_BOUWCODE (opnieuw maken na een wijziging in de code). De overige .webp zijn oude previews, alleen referentie
 ├── CLAUDE.md           # Dit document
 └── README.md           # Korte uitleg van de repo
 ```

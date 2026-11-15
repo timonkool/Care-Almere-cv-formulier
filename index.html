@@ -96,8 +96,9 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .tpl-card{border:2px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;overflow:hidden;
   display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s;}
 .tpl-card.on{border-color:var(--color-brand);box-shadow:0 0 0 3px var(--teal-50);}
-.tpl-preview{position:relative;cursor:pointer;background:var(--slate-100);line-height:0;}
-.tpl-preview img{width:100%;height:auto;display:block;}
+.tpl-preview{position:relative;cursor:pointer;background:#fff;line-height:0;aspect-ratio:210/297;overflow:hidden;border-bottom:1px solid var(--slate-200);}
+/* live preview: het echte A4-template (794px breed) verkleind tot de kaartbreedte */
+.tpl-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:block;}
 .tpl-card .tpl-name{font-size:.92rem;font-weight:700;color:var(--text-strong);padding:10px 12px 2px;}
 .tpl-card .tpl-chosen{font-size:.76rem;font-weight:700;color:var(--teal-700);padding:0 12px;min-height:16px;}
 .tpl-swatches{display:flex;flex-wrap:wrap;gap:8px;padding:8px 12px 12px;}
@@ -384,7 +385,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <span class="block-tag block-tag--req">Laatste stap · Kies je opmaak</span>
       <h2 class="q-title">Hoe wil je dat je cv eruitziet?</h2>
       <p class="q-hint">Kies een ontwerp dat je mooi vindt. Tik daarna onder dat ontwerp op een kleur, dan zie je het voorbeeld in die kleur.</p>
-      <p class="infonote" style="margin:6px 0 14px;"><b>Let op:</b> deze ontwerpen geven een indruk van de stijl. Je cv wordt een benadering van het voorbeeld, geen exacte kopie. De chatbot bouwt de stijl zo goed mogelijk na met jouw eigen gegevens.</p>
+      <p class="infonote" style="margin:6px 0 14px;"><b>Goed om te weten:</b> de chatbot maakt je cv in Word, precies in het ontwerp en de kleur die je kiest, met jouw eigen gegevens. Bij "Modern" komt je foto linksboven; heb je geen foto, dan blijft die plek gewoon weg. "Klassiek" heeft geen foto.</p>
       <div class="tpl-grid" id="tplGrid"></div>
       <p class="chip-note">Je kiest één ontwerp met één kleur. Twijfel je? Kies gewoon wat je het mooist vindt, je jobcoach helpt je later verder.</p>
     </div>
@@ -655,30 +656,31 @@ function addExp(){
 document.getElementById('addExp').onclick=addExp;
 addExp();
 
-/* template picker — data + previews komen uit templates.js (TEMPLATES).
-   De deelnemer kiest één template met één kleurvariant. Een kleur kiezen
-   binnen een template wisselt de voorbeeldafbeelding van dat template. */
+/* template picker — data komt uit templates.js (TEMPLATES).
+   De deelnemer kiest één ontwerp met één kleur. De preview-afbeeldingen zijn
+   het echte Word-resultaat van dezelfde bouwcode (CV_BOUWCODE) die in de
+   cv-prompt meegaat, dus wat je ziet is wat je krijgt.
+   De kaarten worden één keer gebouwd en daarna bijgewerkt (geen herbouw),
+   zodat de afbeeldingen niet bij elke klik opnieuw laden. */
 let selected = null;  // {tpl, color}
 function tplDefaultColor(t){ return (t.kleuren.find(k=>k.id==='blue')||t.kleuren[0]).id; }
 function tplActiveColor(t){ return (selected && selected.tpl===t.id) ? selected.color : tplDefaultColor(t); }
+const tplCards={}; // id -> {card, preview, img, chosenEl, color}
 
-function renderTemplates(){
+function buildTemplates(){
   const grid=document.getElementById('tplGrid');
   grid.innerHTML='';
   TEMPLATES.forEach(t=>{
-    const activeColor=tplActiveColor(t);
-    const col=t.kleuren.find(k=>k.id===activeColor)||t.kleuren[0];
-    const chosen=selected && selected.tpl===t.id;
     const card=document.createElement('div');
-    card.className='tpl-card'+(chosen?' on':'');
-    const sw=t.kleuren.map(k=>`<span class="tpl-swatch${chosen&&selected.color===k.id?' on':''}" data-c="${k.id}" title="${k.naam}" role="button" tabindex="0" aria-label="Kleur ${k.naam}" aria-pressed="${chosen&&selected.color===k.id?'true':'false'}" style="background:${k.hex}"></span>`).join('');
+    card.className='tpl-card';
+    const sw=t.kleuren.map(k=>`<span class="tpl-swatch" data-c="${k.id}" title="${k.naam}" role="button" tabindex="0" aria-label="Kleur ${k.naam}" aria-pressed="false" style="background:${k.hex}"></span>`).join('');
     card.innerHTML=
-      `<div class="tpl-preview" role="button" tabindex="0" aria-label="Kies ontwerp ${t.naam}" aria-pressed="${chosen?'true':'false'}"><img src="${col.img}" alt="Voorbeeld ${t.naam}, kleur ${col.naam}" loading="lazy"></div>`
+      `<div class="tpl-preview" role="button" tabindex="0" aria-label="Kies ontwerp ${t.naam}" aria-pressed="false"><img alt="" loading="lazy"></div>`
       +`<div class="tpl-name">${t.naam}</div>`
-      +`<div class="tpl-chosen">${chosen?'Gekozen: '+col.naam:''}</div>`
+      +`<div class="tpl-chosen"></div>`
       +`<div class="tpl-swatches">${sw}</div>`;
-    const pickTpl=()=>{ selected={tpl:t.id,color:activeColor}; clearVal(); renderTemplates(); };
     const preview=card.querySelector('.tpl-preview');
+    const pickTpl=()=>{ selected={tpl:t.id,color:tplActiveColor(t)}; clearVal(); renderTemplates(); };
     preview.onclick=pickTpl;
     preview.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pickTpl(); } };
     card.querySelectorAll('.tpl-swatch').forEach(s=>{
@@ -687,20 +689,61 @@ function renderTemplates(){
       s.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); pickColor(); } };
     });
     grid.appendChild(card);
+    tplCards[t.id]={card, preview, img:card.querySelector('img'), chosenEl:card.querySelector('.tpl-chosen'), color:null};
+  });
+}
+function renderTemplates(){
+  if(!Object.keys(tplCards).length) buildTemplates();
+  TEMPLATES.forEach(t=>{
+    const c=tplCards[t.id];
+    const activeColor=tplActiveColor(t);
+    const col=t.kleuren.find(k=>k.id===activeColor)||t.kleuren[0];
+    const chosen=!!(selected && selected.tpl===t.id);
+    c.card.classList.toggle('on', chosen);
+    c.preview.setAttribute('aria-pressed', chosen?'true':'false');
+    c.preview.setAttribute('aria-label', `Kies ontwerp ${t.naam}, kleur ${col.naam}`);
+    c.chosenEl.textContent=chosen?'Gekozen: '+col.naam:'';
+    c.card.querySelectorAll('.tpl-swatch').forEach(s=>{
+      const on=chosen && s.dataset.c===col.id;
+      s.classList.toggle('on', on); s.setAttribute('aria-pressed', on?'true':'false');
+    });
+    if(c.color!==col.id){ c.img.src=col.img; c.img.alt=`Voorbeeld ${t.naam}, kleur ${col.naam}`; c.color=col.id; }
   });
 }
 renderTemplates();
 
-/* Beschrijving van het gekozen template + kleur, voor onder de deelnemer-input. */
+/* Het gekozen ontwerp + kleur, voor onder de deelnemer-input.
+   Voor het cv gaat de vaste bouwcode mee (CV_BOUWCODE + CV_GEGEVENS uit
+   templates.js) met de aanroep voor het gekozen ontwerp en de kleur;
+   voor de brief alleen naam + kleur. */
+function selectedTpl(){
+  if(!selected) return null;
+  const t=TEMPLATES.find(x=>x.id===selected.tpl); if(!t) return null;
+  return {t, col:t.kleuren.find(k=>k.id===selected.color)||t.kleuren[0]};
+}
 function opmaakBlok(){
-  if(!selected) return '';
-  const t=TEMPLATES.find(x=>x.id===selected.tpl); if(!t) return '';
-  const col=t.kleuren.find(k=>k.id===selected.color)||t.kleuren[0];
-  let out=`\n-- Door de deelnemer gekozen opmaak --\n`;
-  out+=`Gekozen template: ${t.naam}.\n${t.omschrijving}\n`;
-  out+=`\nGekozen kleurvariant: ${col.naam} (accentkleur ${col.hex}).\n`
-     +`Gebruik deze accentkleur consequent voor alle accenten van dit template: koppen, balken of zijbalk, lijnen, icoontjes en accentvlakken. Houd de lopende tekst donker en goed leesbaar.\n`;
-  return out;
+  const s=selectedTpl(); if(!s) return '';
+  const {t,col}=s;
+  const fence='`'.repeat(3);
+  const aanroep=`maak_cv(gegevens, ontwerp="${t.id}", kleur="${col.hex}", bestand="CV_Voornaam_Achternaam.docx")`;
+  return [
+    ``,
+    `-- Door de deelnemer gekozen opmaak --`,
+    `Gekozen ontwerp: ${t.naam}, kleur ${col.naam} (${col.hex}).${t.foto?'':' Dit ontwerp heeft geen foto.'}`,
+    ``,
+    `Maak het Word-document met de bouwcode hieronder (Python met python-docx):`,
+    `1. Neem de bouwcode letterlijk en volledig over. Verander, verkort of herschrijf er niets aan.`,
+    `2. Vul het woordenboek "gegevens" in met de teksten die je volgens stap 2 voor het cv hebt geschreven. Laat een onderdeel leeg ([] of "") als de kandidaat er niets over heeft. Taken zijn korte bullets. Zet bij talen het niveau dat de kandidaat opgaf.`,
+    t.foto?`3. Heeft de kandidaat een foto gestuurd, zet dan het pad naar dat bestand bij "foto"; anders blijft het None.`:`3. Laat "foto" op None staan.`,
+    `4. Voer de aanroep onderaan uit, met de echte naam van de kandidaat in de bestandsnaam.`,
+    `5. Lever het bestand dat maak_cv() maakt aan de kandidaat.`,
+    ``,
+    fence+`python`, CV_BOUWCODE, ``, CV_GEGEVENS, ``, aanroep, fence, ``
+  ].join(`\n`);
+}
+function opmaakKort(){
+  const s=selectedTpl(); if(!s) return '';
+  return `\n-- Door de deelnemer gekozen cv-opmaak --\nTemplate: ${s.t.naam}, kleur ${s.col.naam} (accentkleur ${s.col.hex}).\n`;
 }
 
 /* gather + preview */
@@ -763,14 +806,13 @@ function buildDataBlock(d){
   const opt=[line('Een keer dat het spannend werd',d.spannend),line('Geleerd van iemand',d.geleerd),line('Voor jezelf opgekomen',d.grens)].join('');
   if(opt.trim()) t+=`\n-- Extra (optioneel) --\n`+opt;
   if(d.nietmeer.length) t+=`\n-- Alleen voor de jobcoach (niet op het cv of in de brief) --\n`+line('Werk of omstandigheden die de kandidaat liever vermijdt',d.nietmeer);
-  t+=opmaakBlok();
   return t;
 }
 function buildPreview(){
   const d=gather();
   const data=`### GEGEVENS VAN DE KANDIDAAT ###\n\n`+buildDataBlock(d);
-  const cv=(MASTERPROMPT+`\n\n---\n\n`+data).trim();
-  const brief=(MASTERPROMPT_MOTIVATIEBRIEF+`\n\n---\n\n`+data).trim();
+  const cv=(MASTERPROMPT+`\n\n---\n\n`+data+opmaakBlok()).trim();
+  const brief=(MASTERPROMPT_MOTIVATIEBRIEF+`\n\n---\n\n`+data+opmaakKort()).trim();
   document.getElementById('previewCV').textContent=cv;
   document.getElementById('previewBrief').textContent=brief;
 }
